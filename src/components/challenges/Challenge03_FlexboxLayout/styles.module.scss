@@ -1,0 +1,320 @@
+@use "../../../styles/variables.scss";
+
+.challenge {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+
+  h3 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+/* Challenge Description Section */
+.challengeDescription {
+  background-color: var(--bg-cards);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+
+  h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .description {
+    p {
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-md);
+      line-height: 1.6;
+    }
+
+    ul {
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-md);
+      padding-left: var(--spacing-lg);
+
+      li {
+        margin-bottom: var(--spacing-xs);
+        line-height: 1.5;
+      }
+    }
+
+    .hint {
+      background-color: var(--bg-primary);
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--warning);
+      margin: 0;
+
+      strong {
+        color: var(--warning);
+      }
+    }
+  }
+}
+
+/* CSS Editor Section */
+.editorSection {
+  .editorHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+
+    h4 {
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .editorActions {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+  }
+
+  .cssEditor {
+    width: 100%;
+    height: 400px;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    background-color: var(--bg-cards);
+    color: var(--text-primary);
+    resize: vertical;
+    line-height: 1.5;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    }
+  }
+}
+
+/* Validation Section */
+.validationSection {
+  background-color: var(--bg-cards);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+
+  h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .scoreDisplay {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+
+    .scoreCircle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid;
+
+      &.valid {
+        border-color: var(--success);
+        background-color: rgba(35, 160, 148, 0.1);
+      }
+
+      &.invalid {
+        border-color: var(--error);
+        background-color: rgba(255, 112, 81, 0.1);
+      }
+
+      .percentage {
+        font-size: var(--font-size-xl);
+        font-weight: bold;
+        color: var(--text-primary);
+      }
+
+      .scoreText {
+        font-size: var(--font-size-sm);
+        color: var(--text-secondary);
+      }
+    }
+
+    .scoreDetails {
+      flex: 1;
+
+      .status {
+        font-size: var(--font-size-lg);
+        font-weight: bold;
+        margin-bottom: var(--spacing-sm);
+
+        &.passed {
+          color: var(--success);
+        }
+
+        &.failed {
+          color: var(--error);
+        }
+      }
+
+      .scoreDescription {
+        color: var(--text-secondary);
+        margin: 0;
+      }
+    }
+  }
+
+  .checksGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+
+    .passedChecks,
+    .failedChecks {
+      h5 {
+        margin-bottom: var(--spacing-md);
+
+        &:first-of-type {
+          color: var(--success);
+        }
+
+        &:last-of-type {
+          color: var(--error);
+        }
+      }
+
+      .checkItem {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm);
+        background-color: var(--bg-primary);
+        border-radius: var(--radius-sm);
+        margin-bottom: var(--spacing-xs);
+
+        .checkPoints {
+          font-weight: bold;
+          font-size: var(--font-size-sm);
+          color: var(--primary);
+          min-width: 30px;
+        }
+
+        .checkDescription {
+          font-size: var(--font-size-sm);
+          color: var(--text-primary);
+        }
+      }
+    }
+
+    .failedChecks .checkItem {
+      opacity: 0.7;
+
+      .checkPoints {
+        color: var(--text-muted);
+      }
+    }
+  }
+}
+
+/* Live Preview Section */
+.previewSection {
+  h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .previewFrame {
+    background-color: var(--bg-cards);
+    border: 2px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    min-height: 400px;
+    overflow: auto;
+
+    /* Preview styles will be injected by the user's CSS */
+  }
+}
+
+/* Hints Section */
+.hintsSection {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+
+  h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .hintsList {
+    margin: 0;
+    padding-left: var(--spacing-lg);
+
+    li {
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-sm);
+      line-height: 1.5;
+
+      code {
+        background-color: var(--bg-cards);
+        color: var(--primary);
+        padding: 2px 4px;
+        border-radius: var(--radius-sm);
+        font-family: var(--font-family-mono);
+        font-size: 0.9em;
+      }
+    }
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .editorSection .editorHeader {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+
+    .editorActions {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .validationSection .scoreDisplay {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .validationSection .checksGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .challengeDescription .description ul {
+    padding-left: var(--spacing-md);
+  }
+
+  .cssEditor {
+    height: 300px;
+  }
+}

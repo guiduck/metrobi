@@ -1,0 +1,192 @@
+@use "../../../styles/mixins.scss";
+
+.modalOverlay {
+  @include mixins.modal;
+  padding: var(--spacing-lg);
+}
+
+.modal {
+  background: var(--bg-cards);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: modalSlideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border: 1px solid var(--border-default);
+}
+
+.header {
+  @include mixins.flex-between;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-default);
+  background: var(--bg-primary);
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: var(--font-size-xl);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  line-height: 1;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+  }
+}
+
+.content {
+  padding: var(--spacing-lg);
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.section {
+  margin-bottom: var(--spacing-xl);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-md) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  p {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.controlsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.controlItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+
+  kbd {
+    background: var(--text-primary);
+    color: var(--bg-cards);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    min-width: 30px;
+    text-align: center;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  span {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+}
+
+.challengeList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+
+  li {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    position: relative;
+    padding-left: var(--spacing-lg);
+
+    &::before {
+      content: "•";
+      color: var(--primary);
+      font-weight: 600;
+      position: absolute;
+      left: 0;
+    }
+  }
+}
+
+.footer {
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--border-default);
+  background: var(--bg-primary);
+  display: flex;
+  justify-content: center;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: var(--spacing-md);
+  }
+
+  .modal {
+    max-height: 95vh;
+  }
+
+  .header,
+  .content,
+  .footer {
+    padding: var(--spacing-md);
+  }
+
+  .title {
+    font-size: var(--font-size-lg);
+  }
+
+  .controlsGrid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .controlItem {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .challengeList li {
+    font-size: var(--font-size-sm);
+  }
+}

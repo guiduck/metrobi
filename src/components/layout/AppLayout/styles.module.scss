@@ -1,0 +1,166 @@
+@use "../../../styles/mixins.scss";
+
+.appLayout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: var(--bg-cards);
+  border-bottom: 1px solid var(--border-default);
+  padding: var(--spacing-lg) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerContent {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+.progressText {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.progressBar {
+  width: 200px;
+  height: 8px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--primary);
+  transition: width var(--transition-normal);
+  border-radius: inherit;
+}
+
+.nav {
+  @include mixins.flex-between;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.currentChallenge {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
+  flex: 1;
+}
+
+.main {
+  flex: 1;
+  padding: var(--spacing-xl) 0;
+}
+
+.content {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.footer {
+  background: var(--bg-cards);
+  border-top: 1px solid var(--border-default);
+  padding: var(--spacing-lg) 0;
+}
+
+.footerContent {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shortcuts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.quickShortcuts {
+  display: flex;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  kbd {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    padding: 2px 6px;
+    font-size: var(--font-size-xs);
+    font-family: var(--font-family-mono);
+  }
+}
+
+@media (max-width: 768px) {
+  .headerContent {
+    gap: var(--spacing-sm);
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .nav {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .currentChallenge {
+    font-size: var(--font-size-base);
+    order: -1;
+  }
+
+  .progress {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .progressBar {
+    width: 150px;
+  }
+
+  .quickShortcuts {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm);
+  }
+}

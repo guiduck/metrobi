@@ -1,0 +1,327 @@
+@use "../../../styles/variables.scss";
+
+.challenge {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+
+  h3 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.controlsSection {
+  background-color: var(--bg-cards);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+
+  .controlGroup {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+
+    label {
+      font-weight: 500;
+      color: var(--text-primary);
+      min-width: 120px;
+    }
+
+    .slider {
+      flex: 1;
+      max-width: 200px;
+    }
+
+    .value {
+      font-weight: bold;
+      color: var(--primary);
+      min-width: 40px;
+    }
+  }
+
+  .actionButtons {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-lg) 0;
+  }
+
+  .toggles {
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+  }
+}
+
+.animationSection {
+  background-color: var(--bg-cards);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+
+  .raceTrack {
+    position: relative;
+    height: 80px;
+    background: linear-gradient(to right, #f0f8ff 0%, #e6f3ff 100%);
+    border: 2px solid var(--border-default);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    overflow: visible;
+
+    .trackLine {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--text-muted);
+      transform: translateY(-50%);
+    }
+
+    .stepMarker {
+      position: absolute;
+      top: -10px;
+      width: 20px;
+      height: 20px;
+      background-color: var(--bg-primary);
+      border: 2px solid var(--border-default);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-sm);
+      font-weight: bold;
+      transform: translateX(-50%);
+      transition: all var(--transition-fast);
+
+      &.reached {
+        background-color: var(--success);
+        color: white;
+        border-color: var(--success);
+      }
+    }
+
+    .tortoise {
+      position: absolute;
+      top: 50%;
+      font-size: 1.5em;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+    }
+
+    .achilles {
+      position: absolute;
+      top: 50%;
+      font-size: 1.5em;
+      transform: translate(-50%, -50%);
+      transition: left 0.1s ease-out;
+      z-index: 2;
+
+      &.running {
+        animation: bounce 0.3s ease-in-out infinite;
+      }
+    }
+
+    .progressLine {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(
+        to right,
+        rgba(74, 144, 226, 0.3) 0%,
+        rgba(74, 144, 226, 0.1) 100%
+      );
+      transition: width 0.1s ease-out;
+      z-index: 1;
+    }
+  }
+
+  .trackLabels {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+}
+
+.statsSection {
+  background-color: var(--bg-cards);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+
+  h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-md);
+
+    .stat {
+      text-align: center;
+      padding: var(--spacing-sm);
+      background-color: var(--bg-primary);
+      border-radius: var(--radius-md);
+
+      .statLabel {
+        display: block;
+        font-size: var(--font-size-sm);
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-xs);
+      }
+
+      .statValue {
+        display: block;
+        font-size: var(--font-size-lg);
+        font-weight: bold;
+        color: var(--primary);
+      }
+    }
+  }
+}
+
+.stepsTable {
+  h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .tableContainer {
+    background-color: var(--bg-cards);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    overflow-x: auto;
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th,
+      td {
+        padding: var(--spacing-sm);
+        text-align: center;
+        border-bottom: 1px solid var(--border-default);
+      }
+
+      th {
+        background-color: var(--bg-primary);
+        font-weight: bold;
+        color: var(--text-primary);
+      }
+
+      td {
+        color: var(--text-secondary);
+        font-family: var(--font-family-mono);
+        font-size: var(--font-size-sm);
+      }
+
+      .reachedRow {
+        background-color: rgba(74, 144, 226, 0.1);
+
+        td {
+          color: var(--text-primary);
+          font-weight: bold;
+        }
+      }
+
+      .moreRows td {
+        font-style: italic;
+        color: var(--text-muted);
+      }
+    }
+  }
+}
+
+.explanationSection {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+
+  h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .explanation {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+
+    .explanationItem {
+      h5 {
+        color: var(--primary);
+        margin-bottom: var(--spacing-sm);
+      }
+
+      p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -60%);
+  }
+}
+
+@media (max-width: 768px) {
+  .controlsSection .controlGroup {
+    flex-direction: column;
+    align-items: stretch;
+
+    label {
+      min-width: auto;
+    }
+
+    .slider {
+      max-width: none;
+    }
+  }
+
+  .controlsSection .actionButtons {
+    flex-direction: column;
+  }
+
+  .statsSection .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .explanationSection .explanation {
+    grid-template-columns: 1fr;
+  }
+}

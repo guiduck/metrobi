@@ -1,0 +1,81 @@
+@use "../../../styles/mixins.scss";
+
+.dialogueBox {
+  position: fixed;
+  bottom: var(--spacing-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.content {
+  background: var(--bg-cards);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 500px;
+  min-width: 300px;
+  transition: all 0.2s ease;
+}
+
+.text {
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
+  transition: opacity 0.15s ease;
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(40px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .dialogueBox {
+    bottom: var(--spacing-lg);
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    transform: none;
+    animation: slideInUpMobile 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideInUpMobile {
+    0% {
+      opacity: 0;
+      transform: translateY(40px) scale(0.9);
+    }
+    60% {
+      opacity: 1;
+      transform: translateY(-5px) scale(1.02);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .content {
+    min-width: unset;
+    max-width: unset;
+    width: 100%;
+    padding: var(--spacing-md);
+  }
+
+  .text {
+    font-size: var(--font-size-sm);
+  }
+}
