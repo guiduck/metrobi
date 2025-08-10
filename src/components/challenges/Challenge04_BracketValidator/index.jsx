@@ -2,183 +2,164 @@ import { useState, useCallback, useMemo } from "react";
 import styles from "./styles.module.scss";
 
 /**
- * Validate if brackets are properly opened and closed
- * @param {string} input - String with brackets to validate
- * @returns {Object} Validation result with details
- */
-export function validateBrackets(input) {
-  // TODO: Implement your bracket validation solution here
-  // Return an object with: { isValid: boolean, error: string|null, position: number }
-  // Handle these brackets: (), [], {}
-  // Brackets must be properly nested and closed in correct order
-
-  /* SOLUTION (uncomment to see the answer):
-  if (typeof input !== "string") {
-    return { isValid: false, error: "Input must be a string", position: -1 };
-  }
-
-  const stack = [];
-  const pairs = { "(": ")", "[": "]", "{": "}" };
-  const openBrackets = Object.keys(pairs);
-  const closeBrackets = Object.values(pairs);
-
-  for (let i = 0; i < input.length; i++) {
-    const char = input[i];
-
-    if (openBrackets.includes(char)) {
-      stack.push({ bracket: char, position: i });
-    } else if (closeBrackets.includes(char)) {
-      if (stack.length === 0) {
-        return {
-          isValid: false,
-          error: `Unexpected closing bracket '${char}'`,
-          position: i,
-          expected: "opening bracket",
-        };
-      }
-
-      const last = stack.pop();
-      if (pairs[last.bracket] !== char) {
-        return {
-          isValid: false,
-          error: `Mismatched bracket '${char}' - expected '${pairs[last.bracket]}'`,
-          position: i,
-          expected: pairs[last.bracket],
-          openPosition: last.position,
-        };
-      }
-    }
-  }
-
-  if (stack.length > 0) {
-    const unclosed = stack[stack.length - 1];
-    return {
-      isValid: false,
-      error: `Unclosed bracket '${unclosed.bracket}'`,
-      position: unclosed.position,
-      expected: pairs[unclosed.bracket],
-    };
-  }
-
-  return { isValid: true, error: null, position: -1 };
-  */
-
-  return { isValid: true, error: null, position: -1 };
-}
-
-/**
  * Get bracket matching visualization data
  * @param {string} input - String to analyze
  * @returns {Array} Array of bracket positions and their matches
  */
-export function getBracketMatches(input) {
-  // TODO: Implement bracket matching visualization data
-  // This function should return an array of objects for each bracket with:
-  // { id, type: 'open'|'close', bracket, position, matched: boolean, pairId }
-  // This is used for the visual highlighting in the UI
 
-  /* SOLUTION (uncomment to see the answer):
-  const stack = [];
-  const matches = [];
-  const pairs = { "(": ")", "[": "]", "{": "}" };
-  const openBrackets = Object.keys(pairs);
-  const closeBrackets = Object.values(pairs);
+//   const pairOfSymbols = {
+//     "(": ")",
+//     "[": "]",
+//     "{": "}",
+//   };
 
-  for (let i = 0; i < input.length; i++) {
-    const char = input[i];
+//   const openBrackets = Object.keys(pairOfSymbols);
+//   const closeBrackets = Object.values(pairOfSymbols);
 
-    if (openBrackets.includes(char)) {
-      stack.push({ bracket: char, position: i, id: matches.length });
-      matches.push({
-        id: matches.length,
-        type: "open",
-        bracket: char,
-        position: i,
-        matched: false,
-        pairId: null,
-      });
-    } else if (closeBrackets.includes(char)) {
-      if (stack.length > 0 && pairs[stack[stack.length - 1].bracket] === char) {
-        const opening = stack.pop();
-        const closingId = matches.length;
 
-        matches[opening.id].matched = true;
-        matches[opening.id].pairId = closingId;
+//   const checkIfValid = (input) => {
+//     if (input.length === 0) {
+//       return true;
+//     }
 
-        matches.push({
-          id: closingId,
-          type: "close",
-          bracket: char,
-          position: i,
-          matched: true,
-          pairId: opening.id,
-        });
-      } else {
-        matches.push({
-          id: matches.length,
-          type: "close",
-          bracket: char,
-          position: i,
-          matched: false,
-          pairId: null,
-        });
-      }
-    }
-  }
+//     const hasNoOpenBrackets = ![...input].some(symbol => openBrackets.includes(symbol));
+//     if (hasNoOpenBrackets) {
+//       return false;
+//     }
 
-  return matches;
-  */
+//     const hasOddNumberOfSymbols = (substring) => substring.length % 2 !== 0;
 
+//     for (let i = 0; i < input.length; i++) {
+//       const symbol = input[i];
+//       const isOpenSymbol = openBrackets.includes(symbol);
+//       const isCloseSymbol = closeBrackets.includes(symbol);
+//       // const hasPair =
+
+//       if (isCloseSymbol) {
+//         const matchingOpeningSymbol = pairOfSymbols[symbol];
+//         const matchingOpeningSymbolPosition = input.indexOf(matchingOpeningSymbol);
+
+//         if (matchingOpeningSymbolPosition === -1 || matchingOpeningSymbolPosition > i) {
+//           return false;
+//         }
+//       }
+
+//       if (isOpenSymbol) {
+//         const matchingClosingSymbol = pairOfSymbols[symbol];
+//         const matchingClosingSymbolPosition = input.indexOf(matchingClosingSymbol);
+
+//         if (matchingClosingSymbolPosition === -1) {
+//           return false;
+//         }
+
+//         const substring = input.substring(i + 1, matchingClosingSymbolPosition);
+
+//         console.log("substring", substring);
+
+//         const isValid = !hasOddNumberOfSymbols(substring);
+
+//         if (!isValid) {
+//           return false;
+//         }
+
+//         const finishedString = substring.length < 1;
+
+//         if (finishedString) {
+//           return true;
+//         }
+
+//         if (!finishedString) {
+//           const substringIsValid = checkIfValid(substring);
+
+//           if (!substringIsValid) {
+//             return false;
+//           }
+
+//           const stringAfterClosingSymbol = input.substring(matchingClosingSymbolPosition + 1);
+
+//           return checkIfValid(stringAfterClosingSymbol);
+//         }
+
+//         return false;
+//       }
+
+//       return true;
+//     }
+
+
+
+//     // TODO: check if there are crossed symbols
+//     // check if inbetweeen symbols are valid
+
+//     // top solution: checar se na substring entre o simbolo aberto eo simbolo correspondente que fecha, tem numero par de elementos e todos que abrem, fecham nessa string
+
+//     //  um for e cada vez que achar um sybol abrindo, => checar se o proximo fecha(é válido), => se nao fechar, {
+//     //    checar se a substring entre o simbolo aberto e o simbolo correspondente que fecha
+//     //    é valida com o memso método de checar se a abertura
+//     //    e fechamento tem frequencias iguais
+//     //    se sim, continuar, se não, retornar false
+//     //}
+//   }
+
+//   const frequencyOfSymbols = {};
+
+//   for (let i = 0; i < userInput.length; i++) {
+//     const symbol = userInput[i];
+//     frequencyOfSymbols[symbol] = (frequencyOfSymbols[symbol] ?? 0) + 1;
+//   }
+
+//   return {
+//     isValid: checkIfValid(userInput),
+//     frequencyOfSymbols: Object.entries(frequencyOfSymbols),
+//   }
+// }
+
+/**
+ * Get bracket matching visualization data
+ * @param {string} userInput - String to analyze
+ * @returns {Object} Object with isValid
+ */
+const getBracketMatches = (userInput) => {
   const pairOfSymbols = {
     "(": ")",
     "[": "]",
     "{": "}",
-    ")": "(",
-    "]": "[",
-    "}": "{",
   };
 
-  const frequencyOfSymbols = {};
+  const openSymbols = Object.keys(pairOfSymbols);
+  const closeSymbols = Object.values(pairOfSymbols);
 
-  for (let i = 0; i < input.length; i++) {
-    const symbol = input[i];
-    const hasPair =
-      // if (!hasPair) {
-      //   frequencyOfSymbols[symbol] = (frequencyOfSymbols[symbol] ?? 0) - 1;
-      // }
+  const openningSymbols = [];
 
-      (frequencyOfSymbols[symbol] = (frequencyOfSymbols[symbol] ?? 0) + 1);
+  for (let i = 0; i < userInput.length; i++) {
+    const symbol = userInput[i];
+
+    if (openSymbols.includes(symbol)) {
+      openningSymbols.push(symbol);
+    }
+
+    if (closeSymbols.includes(symbol)) {
+      if (openningSymbols.length === 0) {
+        return {
+          isValid: false,
+        };
+      }
+
+      const lastOpenningSymbol = openningSymbols.pop();
+
+      const expectedClosingSymbol = pairOfSymbols[lastOpenningSymbol];
+
+      if (symbol !== expectedClosingSymbol) {
+        return {
+          isValid: false,
+        };
+      }
+    }
   }
 
-  console.log(Object.keys(frequencyOfSymbols));
-
-  console.log(
-    Object.keys(frequencyOfSymbols).every((key) => {
-      const matchingPairSymbol = pairOfSymbols[key];
-      console.log(matchingPairSymbol, frequencyOfSymbols[key]);
-      return frequencyOfSymbols[matchingPairSymbol] === frequencyOfSymbols[key];
-    })
-  );
-
-  // TODO: check if there are crossed symbols
-  // check if inbetweeen symbols are valid
-
-  // top solution: checar se na substring entre o simbolo aberto eo simbolo correspondente que fecha, tem numero par de elementos e todos que abrem, fecham nessa string
-
-  //  um for e cada vez que achar um sybol abrindo, => checar se o proximo fecha(é válido), => se nao fechar, {
-  //    checar se a substring entre o simbolo aberto e o simbolo correspondente que fecha
-  //    é valida com o memso método de checar se a abertura
-  //    e fechamento tem frequencias iguais
-  //    se sim, continuar, se não, retornar false
-  //}
-
   return {
-    frequencyOfSymbols: Object.entries(frequencyOfSymbols),
-    isValid: Object.keys(frequencyOfSymbols).every((key) => {
-      const matchingPair = pairOfSymbols[key];
-      return frequencyOfSymbols[matchingPair] === frequencyOfSymbols[key];
-    }),
-  };
+    isValid: openningSymbols.length === 0,
+  }
 }
 
 /**
@@ -189,14 +170,9 @@ export default function Challenge04_BracketValidator() {
   const [input, setInput] = useState("{[()]}");
   const [validation, setValidation] = useState(null);
 
-  const bracketMatches = useMemo(() => getBracketMatches(input), [input]);
-
-  console.log(bracketMatches);
-
   const handleValidate = useCallback(() => {
-    const result = validateBrackets(input);
     const { isValid } = getBracketMatches(input);
-    setValidation({ ...result, isValid });
+    setValidation({ isValid });
   }, [input]);
 
   const handleExampleClick = (example) => {
@@ -214,49 +190,6 @@ export default function Challenge04_BracketValidator() {
     { text: "())", label: "Invalid: Extra close" },
     { text: "", label: "Valid: Empty" },
   ];
-
-  const renderBracketVisualization = () => {
-    return input.split("").map((char, index) => {
-      const match = bracketMatches.find((m) => m.position === index);
-      const isError =
-        validation && !validation.isValid && validation.position === index;
-
-      let className = styles.char;
-      if (match) {
-        className += ` ${styles.bracket}`;
-        if (match.matched) {
-          className += ` ${styles.matched}`;
-        } else {
-          className += ` ${styles.unmatched}`;
-        }
-        if (match.type === "open") {
-          className += ` ${styles.opening}`;
-        } else {
-          className += ` ${styles.closing}`;
-        }
-      }
-      if (isError) {
-        className += ` ${styles.error}`;
-      }
-
-      return (
-        <span
-          key={index}
-          className={className}
-          data-pair-id={match?.pairId}
-          title={
-            match
-              ? `${match.type} bracket ${
-                  match.matched ? "(matched)" : "(unmatched)"
-                }`
-              : ""
-          }
-        >
-          {char}
-        </span>
-      );
-    });
-  };
 
   return (
     <div className={styles.challenge}>
@@ -310,50 +243,11 @@ export default function Challenge04_BracketValidator() {
           </div>
         </div>
 
-        {input && (
-          <div className={styles.visualizationSection}>
-            <h4>🎨 Bracket Visualization:</h4>
-            <div className={styles.visualization}>
-              {/* {renderBracketVisualization()} */}
-            </div>
-
-            <div className={styles.legend}>
-              <div className={styles.legendItem}>
-                <span
-                  className={`${styles.bracket} ${styles.matched} ${styles.opening}`}
-                >
-                  ( [
-                </span>
-                <span>Matched Opening</span>
-              </div>
-              <div className={styles.legendItem}>
-                <span
-                  className={`${styles.bracket} ${styles.matched} ${styles.closing}`}
-                >
-                  ] )
-                </span>
-                <span>Matched Closing</span>
-              </div>
-              <div className={styles.legendItem}>
-                <span className={`${styles.bracket} ${styles.unmatched}`}>
-                  {}
-                </span>
-                <span>Unmatched</span>
-              </div>
-              <div className={styles.legendItem}>
-                <span className={`${styles.bracket} ${styles.error}`}>!</span>
-                <span>Error Position</span>
-              </div>
-            </div>
-          </div>
-        )}
-
         {validation && (
           <div className={styles.resultSection}>
             <div
-              className={`${styles.result} ${
-                validation.isValid ? styles.valid : styles.invalid
-              }`}
+              className={`${styles.result} ${validation.isValid ? styles.valid : styles.invalid
+                }`}
             >
               <div className={styles.resultHeader}>
                 <span className={styles.resultIcon}>
@@ -382,57 +276,6 @@ export default function Challenge04_BracketValidator() {
             </div>
           </div>
         )}
-
-        <div className={styles.statsSection}>
-          <h4>📊 Statistics:</h4>
-          <div className={styles.stats}>
-            <div className={styles.stat}>
-              <span className={styles.statLabel}>Total Characters:</span>
-              <span className={styles.statValue}>{input.length}</span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statLabel}>Brackets:</span>
-              <span className={styles.statValue}>
-                {bracketMatches.frequencyOfSymbols.length}
-              </span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statLabel}>Matched Pairs:</span>
-              <span className={styles.statValue}>
-                {Math.floor(
-                  bracketMatches.frequencyOfSymbols.filter((m) => m.matched)
-                    .length / 2
-                )}
-              </span>
-            </div>
-            <div className={styles.stat}>
-              <span className={styles.statLabel}>Unmatched:</span>
-              <span className={styles.statValue}>
-                {
-                  bracketMatches.frequencyOfSymbols.filter((m) => !m.matched)
-                    .length
-                }
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.rulesSection}>
-          <h4>📋 Validation Rules:</h4>
-          <ul className={styles.rulesList}>
-            <li>Every opening bracket must have a matching closing bracket</li>
-            <li>
-              Brackets must be closed in the correct order (LIFO - Last In,
-              First Out)
-            </li>
-            <li>
-              Supported brackets: <code>()</code>, <code>[]</code>,{" "}
-              <code>{`{}`}</code>
-            </li>
-            <li>Mixed bracket types must be properly nested</li>
-            <li>Empty string is considered valid</li>
-          </ul>
-        </div>
       </div>
     </div>
   );
