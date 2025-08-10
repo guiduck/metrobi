@@ -1,16 +1,17 @@
 @use "../../../styles/variables.scss";
 
-.challenge {
+.container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
+  padding: var(--spacing-lg);
 }
 
 .header {
   text-align: center;
   margin-bottom: var(--spacing-xl);
 
-  h3 {
+  h2 {
     color: var(--text-primary);
     margin-bottom: var(--spacing-sm);
   }
@@ -21,223 +22,186 @@
   }
 }
 
-.content {
+.configuration {
+  background-color: var(--bg-cards);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+
+  .breakingFloorDisplay {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+
+    h3 {
+      color: var(--text-primary);
+      margin-bottom: 0;
+    }
+
+    .breakingFloorValue {
+      color: var(--primary);
+      font-weight: bold;
+      font-size: var(--font-size-2xl);
+    }
+  }
+
+  .configControls {
+    display: flex;
+    align-items: end;
+    gap: var(--spacing-lg);
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .inputGroup {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+
+      .label {
+        display: block;
+        color: var(--text-primary);
+        font-weight: 500;
+        font-size: var(--font-size-sm);
+      }
+
+      .input {
+        width: 150px;
+        height: 40px;
+        padding-inline: 10px;
+        border: 1px solid var(--border-default);
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-base);
+        background-color: var(--bg-cards);
+        color: var(--text-primary);
+        text-align: center;
+
+        &:focus {
+          outline: none;
+          border-color: var(--primary);
+          box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+
+.controls {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.loading {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
-}
-
-.inputSection {
-  display: flex;
-  align-items: end;
+  align-items: center;
   gap: var(--spacing-md);
-  flex-wrap: wrap;
+  padding: var(--spacing-xl);
+  background-color: var(--bg-cards);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
 
-  .inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--border-default);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
 
-    label {
-      font-size: var(--font-size-sm);
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .input {
-      padding: var(--spacing-sm);
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-md);
-      background-color: var(--bg-cards);
-      color: var(--text-primary);
-      width: 120px;
-
-      &:focus {
-        outline: none;
-        border-color: var(--primary);
-      }
-    }
+  p {
+    color: var(--text-secondary);
+    margin: 0;
   }
 }
 
-.presets {
-  h4 {
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-sm);
+.result {
+  background-color: var(--bg-cards);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+
+  h3 {
+    color: var(--success);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
   }
 
-  .presetButtons {
-    display: flex;
-    gap: var(--spacing-sm);
-    flex-wrap: wrap;
-  }
-}
+  .resultGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
 
-.visualSection {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: var(--spacing-xl);
-  align-items: start;
-
-  .buildingContainer {
-    h4 {
-      color: var(--text-primary);
-      margin-bottom: var(--spacing-md);
-    }
-
-    .building {
-      background-color: var(--bg-cards);
-      border: 2px solid var(--border-default);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      position: relative;
-      width: 100%;
-      min-height: 400px;
-
-      .floor {
-        border-bottom: 1px solid var(--border-default);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 var(--spacing-sm);
-        background-color: var(--bg-primary);
-        position: relative;
-        transition: all var(--transition-fast);
-
-        &.optimalFloor {
-          background-color: rgba(74, 144, 226, 0.2);
-          border-left: 4px solid var(--primary);
-        }
-
-        &.currentFloor {
-          background-color: var(--warning);
-          color: white;
-          animation: pulse 1s infinite;
-        }
-
-        .floorNumber {
-          font-size: var(--font-size-sm);
-          font-weight: bold;
-          color: var(--text-primary);
-        }
-
-        .egg {
-          font-size: 1.2em;
-          animation: bounce 0.5s ease-in-out infinite alternate;
-        }
-      }
-    }
-
-    .note {
-      font-size: var(--font-size-sm);
-      color: var(--text-muted);
-      text-align: center;
-      margin-top: var(--spacing-sm);
-    }
-  }
-
-  .solutionPanel {
-    background-color: var(--bg-cards);
-    border: 1px solid var(--border-default);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
-
-    h4 {
-      color: var(--text-primary);
-      margin-bottom: var(--spacing-md);
-    }
-
-    .solutionStats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--spacing-md);
-      margin-bottom: var(--spacing-lg);
-
-      .stat {
-        text-align: center;
-        padding: var(--spacing-md);
-        background-color: var(--bg-primary);
-        border-radius: var(--radius-md);
-
-        .statLabel {
-          display: block;
-          font-size: var(--font-size-sm);
-          color: var(--text-secondary);
-          margin-bottom: var(--spacing-xs);
-        }
-
-        .statValue {
-          display: block;
-          font-size: var(--font-size-xl);
-          font-weight: bold;
-          color: var(--primary);
-        }
-      }
-    }
-
-    .strategy {
-      margin-bottom: var(--spacing-lg);
-
-      h5 {
-        color: var(--text-primary);
-        margin-bottom: var(--spacing-sm);
-      }
-
-      .strategySteps {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--spacing-xs);
-
-        .strategyStep {
-          padding: var(--spacing-xs) var(--spacing-sm);
-          background-color: var(--bg-primary);
-          border: 1px solid var(--border-default);
-          border-radius: var(--radius-sm);
-          font-size: var(--font-size-sm);
-          color: var(--text-primary);
-
-          &.activeStep {
-            background-color: var(--primary);
-            color: white;
-            transform: scale(1.1);
-            animation: pulse 1s infinite;
-          }
-        }
-      }
-    }
-
-    .simulationControls {
-      margin-bottom: var(--spacing-lg);
-      text-align: center;
-    }
-
-    .optimalInfo {
-      background-color: var(--bg-primary);
-      border: 1px solid var(--success);
-      border-radius: var(--radius-md);
+    .resultItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: var(--spacing-md);
+      background-color: var(--bg-primary);
+      border-radius: var(--radius-md);
 
-      h5 {
-        color: var(--success);
-        margin-bottom: var(--spacing-sm);
-      }
-
-      p {
+      .label {
         font-size: var(--font-size-sm);
         color: var(--text-secondary);
         margin-bottom: var(--spacing-xs);
+      }
 
-        &:last-child {
-          margin-bottom: 0;
-          font-weight: bold;
-          color: var(--text-primary);
-        }
+      .value {
+        font-size: var(--font-size-xl);
+        font-weight: bold;
+        color: var(--primary);
+      }
+    }
+  }
+
+  .breakdown {
+    background-color: var(--bg-primary);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+
+    p {
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: var(--spacing-lg);
+
+      li {
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-xs);
       }
     }
   }
 }
 
-.explanationSection {
+.error {
+  background-color: rgba(255, 112, 81, 0.1);
+  border: 1px solid rgba(255, 112, 81, 0.3);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+
+  p {
+    color: var(--error);
+    margin: 0;
+    text-align: center;
+  }
+}
+
+.explanation {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
@@ -248,74 +212,49 @@
     margin-bottom: var(--spacing-md);
   }
 
-  .explanation {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-md);
+  p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
 
-    .explanationItem {
-      h5 {
-        color: var(--primary);
-        margin-bottom: var(--spacing-sm);
-      }
+    &:last-child {
+      margin-bottom: 0;
+    }
 
-      p {
-        color: var(--text-secondary);
-        line-height: 1.6;
-        margin: 0;
-      }
+    strong {
+      color: var(--text-primary);
     }
   }
 }
 
-@keyframes pulse {
-  0%,
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
   100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-@keyframes bounce {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-5px);
+    transform: rotate(360deg);
   }
 }
 
 @media (max-width: 768px) {
-  .inputSection {
+  .container {
+    padding: var(--spacing-md);
+  }
+
+  .configuration .configControls {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
 
-    .inputGroup {
-      .input {
-        width: 100%;
-      }
+    .inputGroup .input {
+      width: 200px;
     }
   }
 
-  .presets .presetButtons {
+  .controls {
     flex-direction: column;
   }
 
-  .visualSection {
-    grid-template-columns: 1fr;
-
-    .buildingContainer {
-      order: 2;
-    }
-
-    .solutionPanel {
-      order: 1;
-    }
-  }
-
-  .explanationSection .explanation {
+  .result .resultGrid {
     grid-template-columns: 1fr;
   }
 }

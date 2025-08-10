@@ -27,13 +27,13 @@
   gap: var(--spacing-lg);
 }
 
-.setupSection {
+.inputSection {
   display: flex;
   align-items: center;
   gap: var(--spacing-lg);
   flex-wrap: wrap;
 
-  .capacityControl {
+  .capacityInput {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
@@ -43,7 +43,7 @@
       color: var(--text-primary);
     }
 
-    .capacityInput {
+    .capacityField {
       padding: var(--spacing-sm);
       border: 1px solid var(--border-default);
       border-radius: var(--radius-md);
@@ -66,9 +66,16 @@
 }
 
 .carrotsSection {
-  h4 {
-    color: var(--text-primary);
+  .sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: var(--spacing-md);
+
+    h4 {
+      color: var(--text-primary);
+      margin: 0;
+    }
   }
 
   .carrotsList {
@@ -110,7 +117,7 @@
         gap: var(--spacing-md);
         flex-wrap: wrap;
 
-        .prop {
+        .propGroup {
           display: flex;
           align-items: center;
           gap: var(--spacing-xs);
@@ -151,11 +158,13 @@
           border-radius: var(--radius-sm);
         }
 
-        .removeBtn {
+        .removeButton {
           padding: var(--spacing-xs);
           background-color: transparent;
           border: 1px solid var(--error);
           color: var(--error);
+          border-radius: var(--radius-sm);
+          cursor: pointer;
 
           &:hover {
             background-color: var(--error);
@@ -167,7 +176,7 @@
   }
 }
 
-.solutionSection {
+.resultsSection {
   background-color: var(--bg-cards);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-lg);
@@ -178,44 +187,40 @@
     margin-bottom: var(--spacing-md);
   }
 
-  .solutionSummary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+  .summary {
+    .summaryCards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
 
-    .summaryCard {
-      text-align: center;
-      padding: var(--spacing-md);
-      background-color: var(--bg-primary);
-      border-radius: var(--radius-md);
+      .summaryCard {
+        text-align: center;
+        padding: var(--spacing-md);
+        background-color: var(--bg-primary);
+        border-radius: var(--radius-md);
 
-      .summaryLabel {
-        display: block;
-        font-size: var(--font-size-sm);
-        color: var(--text-secondary);
-        margin-bottom: var(--spacing-xs);
-      }
+        .summaryLabel {
+          display: block;
+          font-size: var(--font-size-sm);
+          color: var(--text-secondary);
+          margin-bottom: var(--spacing-xs);
+        }
 
-      .summaryValue {
-        display: block;
-        font-size: var(--font-size-xl);
-        font-weight: bold;
-        color: var(--primary);
+        .summaryValue {
+          display: block;
+          font-size: var(--font-size-xl);
+          font-weight: bold;
+          color: var(--primary);
+        }
       }
     }
-  }
 
-  .selectedItems {
-    h5 {
-      color: var(--text-primary);
-      margin-bottom: var(--spacing-sm);
-    }
-
-    .selectedList {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
+    .selectedItems {
+      h5 {
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-sm);
+      }
 
       .selectedItem {
         display: flex;
@@ -225,6 +230,7 @@
         background-color: var(--success);
         color: white;
         border-radius: var(--radius-sm);
+        margin-bottom: var(--spacing-xs);
 
         .itemName {
           font-weight: bold;
@@ -273,21 +279,6 @@
 
           &:last-child {
             margin-bottom: 0;
-          }
-        }
-
-        .greedyItems {
-          display: flex;
-          flex-wrap: wrap;
-          gap: var(--spacing-xs);
-          margin-top: var(--spacing-sm);
-
-          .greedyItem {
-            font-size: var(--font-size-sm);
-            padding: var(--spacing-xs);
-            background-color: var(--warning);
-            color: white;
-            border-radius: var(--radius-sm);
           }
         }
 
@@ -376,6 +367,50 @@
   }
 }
 
+.efficiencySection {
+  background-color: var(--bg-cards);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+
+  h4 {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .efficiencyList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+
+    .efficiencyItem {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      padding: var(--spacing-sm);
+      background-color: var(--bg-primary);
+      border-radius: var(--radius-sm);
+
+      .rank {
+        font-weight: bold;
+        color: var(--primary);
+        min-width: 30px;
+      }
+
+      .carrotName {
+        flex: 1;
+        font-weight: 500;
+        color: var(--text-primary);
+      }
+
+      .efficiencyValue {
+        font-weight: bold;
+        color: var(--success);
+      }
+    }
+  }
+}
+
 .explanationSection {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-default);
@@ -387,7 +422,7 @@
     margin-bottom: var(--spacing-md);
   }
 
-  .explanation {
+  .steps {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--spacing-md);
@@ -408,7 +443,7 @@
 }
 
 @media (max-width: 768px) {
-  .setupSection {
+  .inputSection {
     flex-direction: column;
     align-items: stretch;
 
@@ -421,12 +456,12 @@
     flex-direction: column;
     align-items: stretch;
 
-    .prop {
+    .propGroup {
       justify-content: space-between;
     }
   }
 
-  .solutionSection .solutionSummary {
+  .resultsSection .summary .summaryCards {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -434,7 +469,7 @@
     grid-template-columns: 1fr;
   }
 
-  .explanationSection .explanation {
+  .explanationSection .steps {
     grid-template-columns: 1fr;
   }
 
