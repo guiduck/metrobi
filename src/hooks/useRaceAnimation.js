@@ -49,33 +49,35 @@ export const useRaceAnimation = (raceResult, tortoiseHeadStart, distance) => {
   /**
    * @param {number} stepIndex - Index of the current step
    * @param {Array} steps - Array of all animation steps
+   * @param {Object} currentRaceResult - The race result to use for calculations
    */
-  const getStepDuration = useCallback(
-    (stepIndex, steps) => {
-      if (stepIndex === 0) return 100;
+  const getStepDuration = useCallback((stepIndex, steps, currentRaceResult) => {
+    if (stepIndex === 0) return 100;
 
-      const currentStep = steps[stepIndex];
-      const previousStep = steps[stepIndex - 1];
-      const stepTime = currentStep.time - previousStep.time;
+    const currentStep = steps[stepIndex];
+    const previousStep = steps[stepIndex - 1];
+    const stepTime = currentStep.time - previousStep.time;
 
-      return (stepTime / activeRaceResult.totalTime) * TOTAL_ANIMATION_TIME;
-    },
-    [activeRaceResult]
-  );
+    return (stepTime / currentRaceResult.totalTime) * TOTAL_ANIMATION_TIME;
+  }, []);
 
   /**
    * @param {number} stepIndex - Index of the step to execute
+   * @param {Object} currentRaceResult - The race result to use for animation
    */
   const executeAnimationStep = useCallback(
-    (stepIndex) => {
-      if (!activeRaceResult || stepIndex >= activeRaceResult.steps.length) {
-        console.log("Animation finished");
+    (stepIndex, currentRaceResult) => {
+      if (!currentRaceResult || stepIndex >= currentRaceResult.steps.length) {
         setIsAnimating(false);
         return;
       }
 
-      const step = activeRaceResult.steps[stepIndex];
-      const stepDuration = getStepDuration(stepIndex, activeRaceResult.steps);
+      const step = currentRaceResult.steps[stepIndex];
+      const stepDuration = getStepDuration(
+        stepIndex,
+        currentRaceResult.steps,
+        currentRaceResult
+      );
 
       console.log(`Step ${stepIndex}:`, {
         stepDuration,
@@ -89,16 +91,16 @@ export const useRaceAnimation = (raceResult, tortoiseHeadStart, distance) => {
       animateToStep(step, stepDuration);
       setCurrentStep(stepIndex);
 
-      // Schedule next step
-      if (stepIndex + 1 < activeRaceResult.steps.length) {
-        timeoutRef.current = setTimeout(() => {
-          executeAnimationStep(stepIndex + 1);
-        }, stepDuration);
-      } else {
+      if (stepIndex + 1 >= currentRaceResult.steps.length) {
         setIsAnimating(false);
+        return;
       }
+
+      timeoutRef.current = setTimeout(() => {
+        executeAnimationStep(stepIndex + 1, currentRaceResult);
+      }, stepDuration);
     },
-    [activeRaceResult, getStepDuration, animateToStep]
+    [getStepDuration, animateToStep]
   );
 
   const startAnimation = useCallback(() => {
@@ -111,7 +113,7 @@ export const useRaceAnimation = (raceResult, tortoiseHeadStart, distance) => {
     setCurrentStep(0);
     setInitialPositions();
 
-    setTimeout(() => executeAnimationStep(0), 50);
+    setTimeout(() => executeAnimationStep(0, raceResult), 50);
   }, [raceResult, isAnimating, setInitialPositions, executeAnimationStep]);
 
   const resetAnimation = useCallback(() => {
