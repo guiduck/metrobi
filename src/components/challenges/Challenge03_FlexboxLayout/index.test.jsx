@@ -1,42 +1,29 @@
-import { generateLayoutCSS, validateLayoutCSS } from "./index";
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import Challenge03_FlexboxLayout from "./index";
 
-describe("Challenge03: Flexbox Layout", () => {
-  test("Example 1: Generate layout CSS", () => {
-    const css = generateLayoutCSS();
-    expect(typeof css).toBe("string");
+describe("Challenge03_FlexboxLayout", () => {
+  test("renders all layout elements correctly", () => {
+    render(<Challenge03_FlexboxLayout />);
+
+    expect(screen.getByText("Header")).toBeInTheDocument();
+    expect(screen.getByText("Hero")).toBeInTheDocument();
+    expect(screen.getByText("Main Content")).toBeInTheDocument();
+    expect(screen.getByText("Extra Content")).toBeInTheDocument();
+    expect(screen.getByText("Sidebar")).toBeInTheDocument();
+    expect(screen.getByText("Related Images")).toBeInTheDocument();
+    expect(screen.getByText("Related Posts")).toBeInTheDocument();
+    expect(screen.getByText("Footer")).toBeInTheDocument();
   });
 
-  test("Example 2: Validate complete flexbox CSS", () => {
-    const goodCSS = `
-      .container { display: flex; flex-direction: column; }
-      .header { flex: 0 0 auto; }
-      .main-content { flex: 1; display: flex; }
-      .sidebar { flex: 0 0 200px; }
-    `;
-    const result = validateLayoutCSS(goodCSS);
-    expect(result.score).toBeGreaterThan(0);
-    expect(result.isValid).toBeDefined();
-  });
+  test("renders the challenge title and description", () => {
+    render(<Challenge03_FlexboxLayout />);
 
-  test("Example 3: Validate empty CSS", () => {
-    const result = validateLayoutCSS("");
-    expect(result.score).toBe(0);
-    expect(result.isValid).toBe(false);
-  });
-
-  test("Example 4: Validate partial CSS", () => {
-    const partialCSS = ".container { display: flex; }";
-    const result = validateLayoutCSS(partialCSS);
-    expect(result.score).toBeGreaterThan(0);
-    expect(result.passedChecks).toBeDefined();
-    expect(result.failedChecks).toBeDefined();
-  });
-
-  test("Example 5: Check validation structure", () => {
-    const result = validateLayoutCSS("test");
-    expect(result).toHaveProperty("score");
-    expect(result).toHaveProperty("maxScore");
-    expect(result).toHaveProperty("percentage");
-    expect(result).toHaveProperty("isValid");
+    expect(screen.getByText("📐 Flexbox Layout")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "React code for generating the below figure (using flex)"
+      )
+    ).toBeInTheDocument();
   });
 });

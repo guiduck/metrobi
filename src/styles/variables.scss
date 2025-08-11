@@ -1,5 +1,4 @@
 :root {
-  // Base
   --bg-primary: #f4f4f0;
   --bg-cards: #ffffff;
   --border-default: #e0e0e0;
@@ -7,7 +6,6 @@
   --text-secondary: #666666;
   --text-muted: #999999;
 
-  // Brand
   --primary: #4a90e2;
   --primary-hover: #357abd;
   --success: #23a094;
@@ -43,8 +41,4 @@
 
   --container-max-width: 1200px;
   --header-height: 64px;
-
-  --challenge-pending: #6c757d;
-  --challenge-active: var(--primary);
-  --challenge-completed: var(--success);
 }

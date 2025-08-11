@@ -1,76 +1,36 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import styles from "./styles.module.scss";
+import { InputSection, ExamplesSection, ProcessingSection } from "./ui";
 
 /**
  * Process array items with exponential delays (1, 2, 4, 8... seconds)
  * @param {Array} arr - Array to process
- * @param {Function} onItem - Callback for each processed item
- * @param {Function} onProgress - Callback for progress updates
- * @returns {Promise} Promise that resolves when all items are processed
+ * @returns {Promise<Array>} Promise that resolves to processed items
  */
-export async function processArrayWithExponentialDelays(
-  arr,
-  onItem,
-  onProgress
-) {
-  // TODO: Implement your async solution here
-  // Process array items with exponential delays (1s, 2s, 4s, 8s...)
-  // Call onItem(item, index, delayInSeconds) for each processed item
-  // Call onProgress(completedCount, totalCount) to update progress
-  // Return a promise that resolves with array of processed items
-  // The promise should have a .cancel() method to stop processing
-
-  /* SOLUTION (uncomment to see the answer):
+export async function processArrayWithExponentialDelays(arr) {
   if (!Array.isArray(arr)) {
     throw new Error("Input must be an array");
   }
 
+  if (arr.length === 0) return [];
+
   const results = [];
-  let cancelled = false;
 
-  const promise = new Promise((resolve, reject) => {
-    const processNext = async (index) => {
-      if (cancelled || index >= arr.length) {
-        resolve(results);
-        return;
-      }
-
-      const delay = Math.pow(2, index) * 1000; // 1s, 2s, 4s, 8s...
-      const item = arr[index];
-
-      await new Promise((delayResolve) => {
+  await Promise.all(
+    arr.map(async (item, index) => {
+      const delay = Math.pow(2, index) * 1000;
+      return new Promise((resolve) => {
         setTimeout(() => {
-          if (!cancelled) {
-            delayResolve();
-          }
+          results[index] = { item, index, delay };
+          resolve();
         }, delay);
       });
+    })
+  );
 
-      if (!cancelled) {
-        results.push({ item, index, delay: delay / 1000 });
-        onItem?.(item, index, delay / 1000);
-        onProgress?.(index + 1, arr.length);
-        processNext(index + 1);
-      }
-    };
-
-    processNext(0);
-  });
-
-  promise.cancel = () => {
-    cancelled = true;
-  };
-
-  return promise;
-  */
-
-  return Promise.resolve([]);
+  return results;
 }
 
-/**
- * Challenge 2: Async Array Processing Component
- * Process arrays with exponential delays and visual feedback
- */
 export default function Challenge02_AsyncArray() {
   const [inputValue, setInputValue] = useState('["a", "b", "c", "d"]');
   const [array, setArray] = useState([]);
@@ -80,8 +40,7 @@ export default function Challenge02_AsyncArray() {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [error, setError] = useState("");
 
-  const processingRef = useRef(null);
-  const timerRef = useRef(null);
+  const intervalRef = useRef(null);
 
   const parseInput = useCallback(() => {
     try {
@@ -97,93 +56,91 @@ export default function Challenge02_AsyncArray() {
     }
   }, [inputValue]);
 
-  const startProcessing = useCallback(async () => {
-    if (array.length === 0) {
-      setError("Please enter a valid array first");
-      return;
-    }
-
-    setIsProcessing(true);
-    setProcessedItems([]);
-    setCurrentProgress(0);
-    setError("");
-
-    try {
-      processingRef.current = processArray(array, onNextItem);
-
-      await processingRef.current;
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsProcessing(false);
-      setTimeRemaining(0);
-    }
-  }, [array]);
-
-  const cancelProcessing = useCallback(() => {
-    if (processingRef.current?.cancel) {
-      processingRef.current.cancel();
-    }
-    setIsProcessing(false);
-    setTimeRemaining(0);
-  }, []);
-
-  // Timer for next item countdown
-  useEffect(() => {
-    if (!isProcessing) return;
-
-    const updateTimer = () => {
-      if (currentProgress < array.length) {
-        const nextDelay = Math.pow(2, currentProgress) * 1000;
-        const startTime = Date.now();
-
-        const updateCountdown = () => {
-          const elapsed = Date.now() - startTime;
-          const remaining = Math.max(0, nextDelay - elapsed);
-          setTimeRemaining(Math.ceil(remaining / 1000));
-
-          if (remaining > 0) {
-            timerRef.current = setTimeout(updateCountdown, 100);
-          }
-        };
-
-        updateCountdown();
-      }
-    };
-
-    updateTimer();
-
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [isProcessing, currentProgress, array.length]);
-
-  const handleExampleClick = (example) => {
-    setInputValue(JSON.stringify(example));
-  };
-
-  const onNextItem = (item, index, delay) => {
-    console.log("onNextItem", item, index, delay);
+  /**
+   * @param {string} item - The processed item
+   * @param {number} index - Index of the item
+   * @param {number} delay - Delay used for this item in milliseconds
+   */
+  const onNextItem = useCallback((item, index, delay) => {
     setProcessedItems((prev) => [
       ...prev,
       {
         item,
         index,
-        delay,
+        delay: delay / 1000,
+        timestamp: new Date().toLocaleTimeString(),
       },
     ]);
-  };
+    setCurrentProgress(index + 1);
+  }, []);
 
-  const processArray = async (arr, onNextItem) => {
-    await new Promise.all(
+  const startProcessing = useCallback(async () => {
+    if (array.length === 0) return;
+
+    setIsProcessing(true);
+    setProcessedItems([]);
+    setCurrentProgress(0);
+
+    try {
+      await processArrayWithDelay(array, onNextItem);
+    } catch (error) {
+      console.error("Processing error:", error);
+      setError("Processing failed");
+    }
+
+    setIsProcessing(false);
+    setTimeRemaining(0);
+  }, [array, onNextItem]);
+
+  const cancelProcessing = useCallback(() => {
+    setIsProcessing(false);
+    setCurrentProgress(0);
+    setTimeRemaining(0);
+    setProcessedItems([]);
+
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isProcessing || currentProgress >= array.length) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      return;
+    }
+
+    const nextDelay = Math.pow(2, currentProgress);
+    setTimeRemaining(nextDelay);
+
+    intervalRef.current = setInterval(() => {
+      setTimeRemaining((prev) => Math.max(0, prev - 1));
+    }, 1000);
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isProcessing, currentProgress, array.length]);
+
+  useEffect(() => {
+    parseInput();
+  }, [parseInput]);
+
+  /**
+   * @param {Array} arr - Array to process
+   * @param {Function} onNextItem - Callback for each processed item
+   * @returns {Promise} Promise that resolves when processing is complete
+   */
+  const processArrayWithDelay = async (arr, onNextItem) => {
+    await Promise.all(
       arr.map(async (item, index) => {
         const delay = Math.pow(2, index) * 1000;
         await new Promise((resolve) =>
           setTimeout(() => {
             onNextItem(item, index, delay);
-
             resolve();
           }, delay)
         );
@@ -198,7 +155,23 @@ export default function Challenge02_AsyncArray() {
     ["Hello", "World"],
   ];
 
-  const getNextDelay = (index) => Math.pow(2, index);
+  /**
+   * @param {number} index - Index to calculate delay for
+   * @returns {number} Delay in seconds
+   */
+  const getNextDelay = useCallback((index) => {
+    return Math.pow(2, index);
+  }, []);
+
+  /**
+   * @param {Array} example - Example array to set as input
+   */
+  const handleExampleClick = useCallback((example) => {
+    setInputValue(JSON.stringify(example));
+    setProcessedItems([]);
+    setCurrentProgress(0);
+    setError("");
+  }, []);
 
   return (
     <div className={styles.challenge}>
@@ -210,140 +183,31 @@ export default function Challenge02_AsyncArray() {
       </div>
 
       <div className={styles.content}>
-        <div className={styles.inputSection}>
-          <label htmlFor="arrayInput" className={styles.label}>
-            Enter Array (JSON format):
-          </label>
-          <textarea
-            id="arrayInput"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            className={styles.input}
-            placeholder='["a", "b", "c", "d"]'
-            rows="3"
-            disabled={isProcessing}
-          />
+        <InputSection
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          error={error}
+          isProcessing={isProcessing}
+          onParseInput={parseInput}
+          array={array}
+          onStartProcessing={startProcessing}
+          onCancelProcessing={cancelProcessing}
+        />
 
-          <div className={styles.actions}>
-            <button
-              onClick={parseInput}
-              className="btn"
-              disabled={isProcessing}
-            >
-              Parse Array
-            </button>
-            {array.length > 0 && !isProcessing && (
-              <button onClick={startProcessing} className="btn primary">
-                Start Processing
-              </button>
-            )}
-            {isProcessing && (
-              <button
-                onClick={cancelProcessing}
-                className="btn"
-                style={{ backgroundColor: "var(--error)" }}
-              >
-                Cancel
-              </button>
-            )}
-          </div>
+        <ExamplesSection
+          examples={examples}
+          isProcessing={isProcessing}
+          onExampleClick={handleExampleClick}
+        />
 
-          {error && <div className={styles.error}>❌ {error}</div>}
-        </div>
-
-        <div className={styles.examples}>
-          <h4>Quick Examples:</h4>
-          <div className={styles.exampleButtons}>
-            {examples.map((example, index) => (
-              <button
-                key={index}
-                onClick={() => handleExampleClick(example)}
-                className={`btn ${styles.exampleBtn}`}
-                disabled={isProcessing}
-                title={JSON.stringify(example)}
-              >
-                Example {index + 1}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {array.length > 0 && (
-          <div className={styles.arrayPreview}>
-            <h4>Array to Process:</h4>
-            <div className={styles.previewItems}>
-              {array.map((item, index) => (
-                <div key={index} className={styles.previewItem}>
-                  <span className={styles.itemValue}>
-                    {JSON.stringify(item)}
-                  </span>
-                  <span className={styles.itemDelay}>
-                    {getNextDelay(index)}s
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {(isProcessing || processedItems.length > 0) && (
-          <div className={styles.processingSection}>
-            <div className={styles.progressHeader}>
-              <h4>Processing Progress</h4>
-              {isProcessing && (
-                <div className={styles.timer}>
-                  Next item in:{" "}
-                  <span className={styles.countdown}>{timeRemaining}s</span>
-                </div>
-              )}
-            </div>
-
-            <div className={styles.progressBar}>
-              <div
-                className={styles.progressFill}
-                style={{ width: `${(currentProgress / array.length) * 100}%` }}
-              />
-              <span className={styles.progressText}>
-                {currentProgress} / {array.length}
-              </span>
-            </div>
-
-            <div className={styles.processedList}>
-              {processedItems.map((processed, index) => (
-                <div key={index} className={styles.processedItem}>
-                  <div className={styles.processedHeader}>
-                    <span className={styles.processedIndex}>
-                      #{processed.index + 1}
-                    </span>
-                    <span className={styles.processedTime}>
-                      {processed.timestamp}
-                    </span>
-                  </div>
-                  <div className={styles.processedContent}>
-                    <span className={styles.processedValue}>
-                      {JSON.stringify(processed.item)}
-                    </span>
-                    <span className={styles.processedDelay}>
-                      Delay: {processed.delay}s
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {isProcessing && currentProgress < array.length && (
-              <div className={styles.nextItem}>
-                <span>Next: </span>
-                <span className={styles.nextValue}>
-                  {JSON.stringify(array[currentProgress])}
-                </span>
-                <span className={styles.nextDelay}>
-                  (in {getNextDelay(currentProgress)}s)
-                </span>
-              </div>
-            )}
-          </div>
-        )}
+        <ProcessingSection
+          isProcessing={isProcessing}
+          processedItems={processedItems}
+          timeRemaining={timeRemaining}
+          currentProgress={currentProgress}
+          array={array}
+          getNextDelay={getNextDelay}
+        />
       </div>
     </div>
   );

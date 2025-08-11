@@ -1,4 +1,11 @@
-import { createContext, useState, useCallback, useEffect, useRef } from "react";
+import {
+  createContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  useMemo,
+} from "react";
 
 export const DialogueContext = createContext();
 
@@ -52,13 +59,16 @@ export function DialogueContextProvider({ children }) {
     };
   }, []);
 
-  const value = {
-    isVisible: dialogue.isVisible,
-    currentText: dialogue.currentText,
-    showDialogue,
-    hideDialogue,
-    forceClose,
-  };
+  const value = useMemo(
+    () => ({
+      isVisible: dialogue.isVisible,
+      currentText: dialogue.currentText,
+      showDialogue,
+      hideDialogue,
+      forceClose,
+    }),
+    [dialogue, showDialogue, hideDialogue, forceClose]
+  );
 
   return (
     <DialogueContext.Provider value={value}>

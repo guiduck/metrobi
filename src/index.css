@@ -42,37 +42,6 @@ button:focus-visible {
   box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
 }
 
-.text-muted {
-  color: var(--text-muted, #999999);
-}
-
-.text-secondary {
-  color: var(--text-secondary, #666666);
-}
-
 button {
   outline: none;
-}
-
-.status-badge {
-  padding: var(--spacing-xs, 0.25rem) var(--spacing-sm, 0.5rem);
-  border-radius: var(--radius-sm, 4px);
-  font-size: var(--font-size-sm, 0.875rem);
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.status-badge.completed {
-  background-color: var(--success, #23a094);
-  color: white;
-}
-
-.status-badge.active {
-  background-color: var(--primary, #4a90e2);
-  color: white;
-}
-
-.status-badge.pending {
-  background-color: var(--challenge-pending, #6c757d);
-  color: white;
 }

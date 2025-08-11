@@ -1,5 +1,6 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback } from "react";
 import styles from "./styles.module.scss";
+import { InputSection, ExamplesSection, ResultSection } from "./ui";
 
 /**
  * Get bracket matching visualization data
@@ -15,7 +16,6 @@ import styles from "./styles.module.scss";
 
 //   const openBrackets = Object.keys(pairOfSymbols);
 //   const closeBrackets = Object.values(pairOfSymbols);
-
 
 //   const checkIfValid = (input) => {
 //     if (input.length === 0) {
@@ -86,8 +86,6 @@ import styles from "./styles.module.scss";
 //       return true;
 //     }
 
-
-
 //     // TODO: check if there are crossed symbols
 //     // check if inbetweeen symbols are valid
 
@@ -119,7 +117,7 @@ import styles from "./styles.module.scss";
  * @param {string} userInput - String to analyze
  * @returns {Object} Object with isValid
  */
-const getBracketMatches = (userInput) => {
+export const getBracketMatches = (userInput) => {
   const pairOfSymbols = {
     "(": ")",
     "[": "]",
@@ -159,13 +157,9 @@ const getBracketMatches = (userInput) => {
 
   return {
     isValid: openningSymbols.length === 0,
-  }
-}
+  };
+};
 
-/**
- * Challenge 4: Bracket Validator Component
- * Validate and visualize bracket matching
- */
 export default function Challenge04_BracketValidator() {
   const [input, setInput] = useState("{[()]}");
   const [validation, setValidation] = useState(null);
@@ -175,6 +169,9 @@ export default function Challenge04_BracketValidator() {
     setValidation({ isValid });
   }, [input]);
 
+  /**
+   * @param {string} example - Example string to set as input
+   */
   const handleExampleClick = (example) => {
     setInput(example);
     setValidation(null);
@@ -201,81 +198,19 @@ export default function Challenge04_BracketValidator() {
       </div>
 
       <div className={styles.content}>
-        <div className={styles.inputSection}>
-          <label htmlFor="bracketInput" className={styles.label}>
-            Enter string with brackets:
-          </label>
-          <input
-            id="bracketInput"
-            type="text"
-            value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-              setValidation(null);
-            }}
-            className={styles.input}
-            placeholder="Enter brackets like {[()]}"
-          />
+        <InputSection
+          input={input}
+          setInput={setInput}
+          setValidation={setValidation}
+          onValidate={handleValidate}
+        />
 
-          <div className={styles.actions}>
-            <button onClick={handleValidate} className="btn primary">
-              Validate Brackets
-            </button>
-          </div>
-        </div>
+        <ExamplesSection
+          examples={examples}
+          onExampleClick={handleExampleClick}
+        />
 
-        <div className={styles.examples}>
-          <h4>Quick Examples:</h4>
-          <div className={styles.exampleGrid}>
-            {examples.map((example, index) => (
-              <button
-                key={index}
-                onClick={() => handleExampleClick(example.text)}
-                className={`btn ${styles.exampleBtn}`}
-                title={example.label}
-              >
-                <span className={styles.exampleText}>
-                  {example.text || "(empty)"}
-                </span>
-                <span className={styles.exampleLabel}>{example.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {validation && (
-          <div className={styles.resultSection}>
-            <div
-              className={`${styles.result} ${validation.isValid ? styles.valid : styles.invalid
-                }`}
-            >
-              <div className={styles.resultHeader}>
-                <span className={styles.resultIcon}>
-                  {validation.isValid ? "✅" : "❌"}
-                </span>
-                <span className={styles.resultText}>
-                  {validation.isValid ? "Valid Brackets!" : "Invalid Brackets"}
-                </span>
-              </div>
-
-              {!validation.isValid && (
-                <div className={styles.errorDetails}>
-                  <p className={styles.errorMessage}>{validation.error}</p>
-                  {validation.position >= 0 && (
-                    <p className={styles.errorPosition}>
-                      Error at position: {validation.position + 1}
-                    </p>
-                  )}
-                  {validation.expected && (
-                    <p className={styles.expectedBracket}>
-                      Expected: <code>{validation.expected}</code>
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        <ResultSection validation={validation} />
       </div>
     </div>
   );

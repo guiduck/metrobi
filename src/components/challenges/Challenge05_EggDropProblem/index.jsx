@@ -1,5 +1,12 @@
 import { useState, useCallback, useMemo } from "react";
 import styles from "./styles.module.scss";
+import {
+  ConfigurationSection,
+  ControlsSection,
+  LoadingSection,
+  ResultSection,
+  ExplanationSection,
+} from "./ui";
 
 /**
  * Solves the egg dropping problem using range division strategy
@@ -22,7 +29,6 @@ export function solveEggDrop(breakingFloor, searchRangeSize = 10) {
     firstEggDrops++;
 
     if (floor >= breakingFloor) {
-      console.log("first egg broke at", floor);
       firstEggBrokeAt = floor;
       break;
     }
@@ -34,18 +40,12 @@ export function solveEggDrop(breakingFloor, searchRangeSize = 10) {
   if (!!firstEggBrokeAt) {
     searchStart = firstEggBrokeAt - searchRangeSize + 1;
     searchEnd = firstEggBrokeAt;
-
-    console.log("first egg is broken");
-
-    console.log("search start", searchStart);
-    console.log("search end", searchEnd);
   }
 
   for (let floor = searchStart; floor <= searchEnd; floor++) {
     secondEggDrops++;
 
     if (floor >= breakingFloor) {
-      console.log("second egg broke at:", floor);
       foundBreakingFloor = breakingFloor;
       break;
     }
@@ -78,10 +78,6 @@ export function getOptimal100FloorSequence() {
   return sequence;
 }
 
-/**
- * Challenge 5: Egg Dropping Problem Component
- * Find the highest floor an egg can be dropped from without breaking
- */
 export default function Challenge05_EggDropProblem() {
   const [result, setResult] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
@@ -121,121 +117,26 @@ export default function Challenge05_EggDropProblem() {
         </p>
       </div>
 
-      <div className={styles.configuration}>
-        <div className={styles.breakingFloorDisplay}>
-          <h3>
-            🎯 Current Breaking Floor:{" "}
-            <span className={styles.breakingFloorValue}>{breakingFloor}</span>
-          </h3>
-        </div>
+      <ConfigurationSection
+        breakingFloor={breakingFloor}
+        searchRangeSize={searchRangeSize}
+        setSearchRangeSize={setSearchRangeSize}
+        setResult={setResult}
+        onRandomizeBreakingFloor={handleRandomizeBreakingFloor}
+      />
 
-        <div className={styles.configControls}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="searchRangeSize" className={styles.label}>
-              Search Range Size:
-            </label>
-            <input
-              id="searchRangeSize"
-              type="number"
-              min="1"
-              max="50"
-              value={searchRangeSize}
-              onChange={(e) => {
-                setSearchRangeSize(Number(e.target.value));
-                setResult(null);
-              }}
-              className={styles.input}
-            />
-          </div>
+      <ControlsSection
+        isRunning={isRunning}
+        result={result}
+        onSolve={handleSolve}
+        onReset={handleReset}
+      />
 
-          <button onClick={handleRandomizeBreakingFloor} className="btn">
-            🎲 Randomize Breaking Floor
-          </button>
-        </div>
-      </div>
+      <LoadingSection isRunning={isRunning} />
 
-      <div className={styles.controls}>
-        <button
-          onClick={handleSolve}
-          disabled={isRunning}
-          className="btn primary"
-        >
-          {isRunning ? "Solving..." : "Solve Egg Drop Problem"}
-        </button>
+      <ResultSection result={result} searchRangeSize={searchRangeSize} />
 
-        {result && (
-          <button onClick={handleReset} className="btn">
-            Reset
-          </button>
-        )}
-      </div>
-
-      {isRunning && (
-        <div className={styles.loading}>
-          <div className={styles.spinner}></div>
-          <p>Dropping eggs and calculating optimal strategy...</p>
-        </div>
-      )}
-
-      {result && !result.error && (
-        <div className={styles.result}>
-          <h3>🎯 Solution Found!</h3>
-
-          <div className={styles.resultGrid}>
-            <div className={styles.resultItem}>
-              <span className={styles.label}>Breaking Floor:</span>
-              <span className={styles.value}>{result.breakingFloor}</span>
-            </div>
-
-            <div className={styles.resultItem}>
-              <span className={styles.label}>Total Drops:</span>
-              <span className={styles.value}>{result.drops}</span>
-            </div>
-
-            <div className={styles.resultItem}>
-              <span className={styles.label}>Worst Case Scenario:</span>
-              <span className={styles.value}>{result.worstCase} drops</span>
-            </div>
-
-            <div className={styles.resultItem}>
-              <span className={styles.label}>Search range size Used:</span>
-              <span className={styles.value}>{searchRangeSize}</span>
-            </div>
-          </div>
-
-          <div className={styles.breakdown}>
-            <p>
-              <strong>Breakdown:</strong>
-            </p>
-            <ul>
-              <li>First egg drops: {result.firstEggDrops}</li>
-              <li>Second egg drops: {result.secondEggDrops}</li>
-            </ul>
-          </div>
-        </div>
-      )}
-
-      {result && result.error && (
-        <div className={styles.error}>
-          <p>❌ Error: {result.error}</p>
-        </div>
-      )}
-
-      <div className={styles.explanation}>
-        <h4>💡 How It Works:</h4>
-        <p>
-          <strong>Range Division Strategy:</strong> Divide 100 floors into
-          ranges of size {searchRangeSize}. Drop the first egg from each range
-          boundary until it breaks. Then use the second egg to find the exact
-          floor within that range using linear search.
-        </p>
-        <p>
-          <strong>Worst Case:</strong>{" "}
-          {Math.ceil(100 / searchRangeSize) - 1 + searchRangeSize} drops (
-          {Math.ceil(100 / searchRangeSize) - 1} first egg drops +{" "}
-          {searchRangeSize} second egg drops in the worst case scenario)
-        </p>
-      </div>
+      <ExplanationSection searchRangeSize={searchRangeSize} />
     </div>
   );
 }

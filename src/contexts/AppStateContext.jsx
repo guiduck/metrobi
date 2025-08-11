@@ -45,7 +45,6 @@ const CHALLENGES = [
   },
 ];
 
-// Dialogue texts - will eventually move to individual challenge components
 const DIALOGUE_TEXTS = {
   welcome:
     "Welcome to Metrobi's Frontend Engineering Challenge! Use 'H' for help, arrow keys to navigate. Let's start! 🚀",
@@ -88,36 +87,6 @@ export function AppStateProvider({ children }) {
   /**
    * @param {number} challengeId
    */
-  const markChallengeCompleted = useCallback((challengeId) => {
-    setChallenges((prev) =>
-      prev.map((challenge) =>
-        challenge.id === challengeId
-          ? { ...challenge, status: "completed" }
-          : challenge
-      )
-    );
-  }, []);
-
-  /**
-   * @param {number} challengeId
-   */
-  const markChallengeActive = useCallback((challengeId) => {
-    setChallenges((prev) =>
-      prev.map((challenge) => ({
-        ...challenge,
-        status:
-          challenge.id === challengeId
-            ? "active"
-            : challenge.status === "completed"
-            ? "completed"
-            : "pending",
-      }))
-    );
-  }, []);
-
-  /**
-   * @param {number} challengeId
-   */
   const resetChallenge = useCallback((challengeId) => {
     setChallenges((prev) =>
       prev.map((challenge) =>
@@ -131,11 +100,6 @@ export function AppStateProvider({ children }) {
   const toggleInstructions = useCallback(() => {
     setShowInstructions((prev) => !prev);
   }, []);
-
-  const getProgress = useCallback(() => {
-    const completed = challenges.filter((c) => c.status === "completed").length;
-    return { completed, total: challenges.length };
-  }, [challenges]);
 
   const getChallengeDialogue = useCallback(
     (challengeId) => DIALOGUE_TEXTS[challengeId] || DIALOGUE_TEXTS.completed,
@@ -155,11 +119,10 @@ export function AppStateProvider({ children }) {
       showInstructions,
       nextChallenge,
       previousChallenge,
-      markChallengeCompleted,
-      markChallengeActive,
+
       resetChallenge,
       toggleInstructions,
-      getProgress,
+
       getChallengeDialogue,
       isWelcomeScreen,
     }),
@@ -170,11 +133,10 @@ export function AppStateProvider({ children }) {
       showInstructions,
       nextChallenge,
       previousChallenge,
-      markChallengeCompleted,
-      markChallengeActive,
+
       resetChallenge,
       toggleInstructions,
-      getProgress,
+
       getChallengeDialogue,
       isWelcomeScreen,
     ]

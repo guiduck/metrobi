@@ -44,9 +44,9 @@ export default function InstructionsModal({ isOpen, onClose }) {
           <section className={styles.section}>
             <h3>🎯 Objective</h3>
             <p>
-              Complete 7 coding challenges to showcase your frontend engineering
-              skills. Each challenge tests different aspects of programming and
-              problem-solving.
+              Explore 7 coding challenges that demonstrate different frontend
+              engineering skills. Each challenge showcases solutions to common
+              programming problems and interactive implementations.
             </p>
           </section>
 
@@ -73,30 +73,45 @@ export default function InstructionsModal({ isOpen, onClose }) {
                 <kbd>Esc</kbd>
                 <span>Close modal/dialogue</span>
               </div>
-              <div className={styles.controlItem}>
-                <kbd>Enter</kbd>
-                <span>Confirm action</span>
-              </div>
             </div>
           </section>
 
           <section className={styles.section}>
-            <h3>📋 Challenge List</h3>
+            <h3>📋 Challenge Overview</h3>
             <ul className={styles.challengeList}>
-              <li>Array Duplicates - Find duplicates in arrays</li>
-              <li>Async Array - Handle exponential delays</li>
-              <li>Flexbox Layout - CSS layout mastery</li>
-              <li>Bracket Validator - Validate bracket sequences</li>
-              <li>Egg Drop Problem - Optimization algorithms</li>
-              <li>Zeno's Paradox - Animation and math</li>
-              <li>Knapsack Problem - Dynamic programming</li>
+              <li>
+                <strong>Array Duplicates</strong> - Find duplicate items in
+                arrays
+              </li>
+              <li>
+                <strong>Async Array</strong> - Process arrays with exponential
+                delays
+              </li>
+              <li>
+                <strong>Flexbox Layout</strong> - Recreate layouts using CSS
+                Flexbox
+              </li>
+              <li>
+                <strong>Bracket Validator</strong> - Validate bracket sequences
+              </li>
+              <li>
+                <strong>Egg Drop Problem</strong> - Optimization algorithm
+                implementation
+              </li>
+              <li>
+                <strong>Zeno's Paradox</strong> - Animated race simulation
+              </li>
+              <li>
+                <strong>Carrot bags Problem</strong> - Dynamic programming
+                solution
+              </li>
             </ul>
           </section>
         </div>
 
         <div className={styles.footer}>
           <button className="btn primary" onClick={onClose}>
-            Got it! Let's code! 🚀
+            Got it! 🚀
           </button>
         </div>
       </div>

@@ -47,28 +47,7 @@ export default function AppLayout({ children }) {
       key: "R",
       handler: () => appState.resetChallenge(appState.currentChallengeId),
     },
-    {
-      key: "c",
-      handler: () => {
-        if (
-          appState.currentChallengeId > 0 &&
-          appState.currentChallenge?.status !== "completed"
-        ) {
-          appState.markChallengeCompleted(appState.currentChallengeId);
-        }
-      },
-    },
-    {
-      key: "C",
-      handler: () => {
-        if (
-          appState.currentChallengeId > 0 &&
-          appState.currentChallenge?.status !== "completed"
-        ) {
-          appState.markChallengeCompleted(appState.currentChallengeId);
-        }
-      },
-    },
+
     {
       key: "Escape",
       handler: () => {
@@ -87,12 +66,6 @@ export default function AppLayout({ children }) {
   useShortcut(shortcuts);
 
   useEffect(() => {
-    if (appState.currentChallengeId <= 0) return;
-
-    appState.markChallengeActive(appState.currentChallengeId);
-  }, [appState.currentChallengeId, appState.markChallengeActive]);
-
-  useEffect(() => {
     const text = appState.getChallengeDialogue(appState.currentChallengeId);
     if (!text) return;
 
@@ -103,27 +76,11 @@ export default function AppLayout({ children }) {
     dialogue.showDialogue,
   ]);
 
-  const progress = appState.getProgress();
-
   return (
     <div className={styles.appLayout}>
       <header className={styles.header}>
         <div className={styles.headerContent}>
           <h1 className={styles.title}>🚀 Metrobi Frontend Challenge</h1>
-
-          <div className={styles.progress}>
-            <span className={styles.progressText}>
-              Progress: {progress.completed}/{progress.total}
-            </span>
-            <div className={styles.progressBar}>
-              <div
-                className={styles.progressFill}
-                style={{
-                  width: `${(progress.completed / progress.total) * 100}%`,
-                }}
-              />
-            </div>
-          </div>
 
           <nav className={styles.nav}>
             <button
@@ -176,9 +133,6 @@ export default function AppLayout({ children }) {
               </span>
               <span>
                 <kbd>P</kbd> Previous
-              </span>
-              <span>
-                <kbd>C</kbd> Complete
               </span>
               <span>
                 <kbd>R</kbd> Reset

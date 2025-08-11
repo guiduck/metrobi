@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import styles from "./styles.module.scss";
+import { InputSection, ExamplesSection, ResultsSection } from "./ui";
 
 /**
  * Find duplicate items in any given array
@@ -7,26 +8,6 @@ import styles from "./styles.module.scss";
  * @returns {Array} Array of duplicate items
  */
 export function findDuplicates(arr) {
-  // TODO: Implement your solution here
-  // Return an array of duplicate items
-
-  /* SOLUTION (uncomment to see the answer):
-  if (!Array.isArray(arr)) return [];
-  
-  const seen = new Set();
-  const duplicates = new Set();
-  
-  for (const item of arr) {
-    if (seen.has(item)) {
-      duplicates.add(item);
-    } else {
-      seen.add(item);
-    }
-  }
-  
-  return Array.from(duplicates);
-  */
-
   const frequencies = {};
 
   for (let i = 0; i < arr.length; i++) {
@@ -40,10 +21,6 @@ export function findDuplicates(arr) {
   );
 }
 
-/**
- * Challenge 1: Array Duplicates Component
- * Interactive component to find duplicate items in arrays
- */
 export default function Challenge01_ArrayDuplicates() {
   const [inputValue, setInputValue] = useState(
     '["a", "b", "c", "a", "d", "b"]'
@@ -71,6 +48,9 @@ export default function Challenge01_ArrayDuplicates() {
     }
   }, [inputValue]);
 
+  /**
+   * @param {Array} example - Example array to set as input
+   */
   const handleExampleClick = (example) => {
     setInputValue(JSON.stringify(example));
   };
@@ -91,93 +71,19 @@ export default function Challenge01_ArrayDuplicates() {
       </div>
 
       <div className={styles.content}>
-        <div className={styles.inputSection}>
-          <label htmlFor="arrayInput" className={styles.label}>
-            Enter Array (JSON format):
-          </label>
-          <textarea
-            id="arrayInput"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            className={styles.input}
-            placeholder='["a", "b", "c", "a", "d", "b"]'
-            rows="3"
-          />
+        <InputSection
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          error={error}
+          onParseInput={parseInput}
+        />
 
-          <div className={styles.actions}>
-            <button onClick={parseInput} className="btn primary">
-              Find Duplicatessssss
-            </button>
-          </div>
+        <ExamplesSection
+          examples={examples}
+          onExampleClick={handleExampleClick}
+        />
 
-          {error && <div className={styles.error}>❌ {error}</div>}
-        </div>
-
-        <div className={styles.examples}>
-          <h4>Quick Examples:</h4>
-          <div className={styles.exampleButtons}>
-            {examples.map((example, index) => (
-              <button
-                key={index}
-                onClick={() => handleExampleClick(example)}
-                className={`btn ${styles.exampleBtn}`}
-                title={JSON.stringify(example)}
-              >
-                Example {index + 1}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {array.length > 0 && (
-          <div className={styles.results}>
-            <div className={styles.arrayDisplay}>
-              <h4>Input Array:</h4>
-              <div className={styles.arrayItems}>
-                {array.map((item, index) => (
-                  <span
-                    key={index}
-                    className={`${styles.arrayItem} ${
-                      duplicates.includes(item) ? styles.duplicate : ""
-                    }`}
-                  >
-                    {JSON.stringify(item)}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className={styles.duplicatesDisplay}>
-              <h4>Duplicates Found:</h4>
-              {duplicates.length > 0 ? (
-                <div className={styles.duplicateItems}>
-                  {duplicates.map((item, index) => (
-                    <span key={index} className={styles.duplicateItem}>
-                      {JSON.stringify(item)}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className={styles.noDuplicates}>✅ No duplicates found!</p>
-              )}
-            </div>
-
-            <div className={styles.stats}>
-              <div className={styles.stat}>
-                <span className={styles.statLabel}>Total Items:</span>
-                <span className={styles.statValue}>{array.length}</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statLabel}>Unique Items:</span>
-                <span className={styles.statValue}>{new Set(array).size}</span>
-              </div>
-              <div className={styles.stat}>
-                <span className={styles.statLabel}>Duplicate Types:</span>
-                <span className={styles.statValue}>{duplicates.length}</span>
-              </div>
-            </div>
-          </div>
-        )}
+        <ResultsSection array={array} duplicates={duplicates} />
       </div>
     </div>
   );

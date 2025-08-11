@@ -144,38 +144,6 @@ pre {
   padding: 0 var(--spacing-md);
 }
 
-.flex {
-  display: flex;
-  &-center {
-    align-items: center;
-    justify-content: center;
-  }
-  &-between {
-    justify-content: space-between;
-  }
-  &-column {
-    flex-direction: column;
-  }
-}
-
-.text {
-  &-center {
-    text-align: center;
-  }
-  &-muted {
-    color: var(--text-muted);
-  }
-  &-secondary {
-    color: var(--text-secondary);
-  }
-  &-sm {
-    font-size: var(--font-size-sm);
-  }
-  &-lg {
-    font-size: var(--font-size-lg);
-  }
-}
-
 * {
   transition: background-color var(--transition-fast),
     border-color var(--transition-fast), color var(--transition-fast),
