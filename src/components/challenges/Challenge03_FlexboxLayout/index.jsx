@@ -3,42 +3,67 @@ import styles from "./styles.module.scss";
 
 export default function Challenge03_FlexboxLayout() {
   return (
-    <div className={styles.challenge}>
-      <div className={styles.header}>
-        <h3>📐 Flexbox Layout</h3>
-        <p>React code for generating the below figure (using flex)</p>
-      </div>
+    <article className={styles.challenge}>
+      <header className={styles.header}>
+        <h1>📐 Flexbox Layout Challenge</h1>
+        <p>Create responsive layouts using modern CSS Flexbox techniques</p>
+      </header>
 
-      <div className={styles.content}>
-        <div className={styles.layoutContainer}>
-          <div className={styles.headerSection}>Header</div>
+      <main className={styles.content}>
+        <section className={styles.layoutDemo} aria-labelledby="demo-heading">
+          <h2 id="demo-heading" className="sr-only">
+            Demonstration
+          </h2>
 
-          <div className={styles.mainSection}>
-            <div className={styles.leftSection}>
-              <div className={styles.hero}>Hero</div>
-              <div className={styles.contentRow}>
-                <div className={styles.mainContent}>
-                  Main Content
-                  <div className={styles.contentSubtext}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    do eiusmod tempor incididunt ut labore et dolore magna
-                    aliqua.
-                  </div>
-                </div>
-                <div className={styles.extraContent}>Extra Content</div>
-              </div>
+          <div
+            className={styles.layoutContainer}
+            role="region"
+            aria-label="Flexbox layout example"
+          >
+            <header className={styles.headerSection}>
+              <h3>Header</h3>
+            </header>
+
+            <div className={styles.mainSection}>
+              <aside className={styles.leftSection}>
+                <section className={styles.hero}>
+                  <h4>Hero</h4>
+                </section>
+                <nav className={styles.sidebar} aria-label="Main navigation">
+                  <h4>Sidebar</h4>
+                </nav>
+              </aside>
+
+              <main className={styles.contentColumn}>
+                <section className={styles.mainContent}>
+                  <h4>Main Content</h4>
+                  <p className={styles.contentSubtext}>
+                    Primary article content and information. This demonstrates
+                    how flexbox can create flexible, responsive layouts that
+                    adapt to different screen sizes.
+                  </p>
+                </section>
+                <aside className={styles.extraContent}>
+                  <h5>Extra Content</h5>
+                </aside>
+              </main>
             </div>
-            <div className={styles.sidebar}>Sidebar</div>
-          </div>
 
-          <div className={styles.bottomSection}>
-            <div className={styles.relatedImages}>Related Images</div>
-            <div className={styles.relatedPosts}>Related Posts</div>
-          </div>
+            <section className={styles.bottomSection}>
+              <div className={styles.relatedImages}>
+                <h4>Related Images</h4>
+              </div>
+              <aside className={styles.relatedPosts}>
+                <h4>Related Posts</h4>
+              </aside>
+            </section>
 
-          <div className={styles.footerSection}>Footer</div>
-        </div>
-      </div>
-    </div>
+            <footer className={styles.footerSection}>
+              <h4>Footer</h4>
+            </footer>
+          </div>
+        </section>
+      </main>
+    </article>
   );
 }
