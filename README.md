@@ -6,7 +6,7 @@ This project demonstrates my knowledge in modern React development, algorithm im
 
 I hope you enjoy exploring!
 
-## 🎮 About This Challenge Application
+## 🎮 About This Challenge Applicatio
 
 This is an interactive React application featuring 7 unique coding challenges that test different aspects of frontend engineering:
 
