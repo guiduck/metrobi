@@ -18,55 +18,121 @@ export function findMostExpensiveBag(carrotTypes, bagCapacity) {
     return { maxPrice: 0, selectedCarrots: [], solutionTable: [] };
   }
 
-  const bestPrice = Array(bagCapacity + 1).fill(0);
-  const chosenCarrot = Array(bagCapacity + 1).fill(-1);
+  const pricePerWeight = {};
+  const carrotBag = {};
 
-  for (let weight = 1; weight <= bagCapacity; weight++) {
-    for (let carrotIndex = 0; carrotIndex < carrotTypes.length; carrotIndex++) {
-      const carrotType = carrotTypes[carrotIndex];
-
-      if (carrotType.kg <= weight) {
-        const priceWithNewCarrotType =
-          bestPrice[weight - carrotType.kg] + carrotType.price;
-
-        if (priceWithNewCarrotType > bestPrice[weight]) {
-          bestPrice[weight] = priceWithNewCarrotType;
-          chosenCarrot[weight] = carrotIndex;
-        }
-      }
-    }
-  }
-
-  const carrotCounts = Array(carrotTypes.length).fill(0);
   let remainingWeight = bagCapacity;
 
-  while (remainingWeight > 0 && chosenCarrot[remainingWeight] !== -1) {
-    const carrotIndex = chosenCarrot[remainingWeight];
-    carrotCounts[carrotIndex]++;
-    remainingWeight -= carrotTypes[carrotIndex].kg;
+  for (let weight = 0; weight <= bagCapacity; weight++) {
+    carrotTypes.forEach((carrot) => {
+      const currentBag = carrotBag[weight - carrot.kg] ?? {};
+      const newPriceWithNewCarrot =
+        (pricePerWeight[weight - carrot.kg] ?? 0) + carrot.price;
+      let currentCarrotCount = currentBag[carrot.id] ?? 0;
+
+      const fitsBag = weight >= carrot.kg;
+      const isHigherValue =
+        newPriceWithNewCarrot > (pricePerWeight[weight] ?? 0);
+
+      if (isHigherValue && fitsBag) {
+        pricePerWeight[weight] = newPriceWithNewCarrot ?? 0;
+        remainingWeight =
+          (currentBag.remainingWeight ?? bagCapacity) - carrot.kg;
+        currentCarrotCount++;
+
+        carrotBag[weight] = {
+          ...currentBag,
+          remainingWeight,
+          price: pricePerWeight[weight] ?? 0,
+          [carrot.id]: currentCarrotCount,
+        };
+      }
+    });
   }
 
-  const selectedCarrots = carrotCounts.reduce((result, count, index) => {
-    if (count > 0) {
-      const carrotType = carrotTypes[index];
-      result.push({
-        ...carrotType,
-        index,
-        count,
-        totalWeight: carrotType.kg * count,
-        totalPrice: carrotType.price * count,
-      });
-    }
-    return result;
-  }, []);
+  const finalBag = carrotBag[bagCapacity];
+
+  const selectedCarrots = carrotTypes.map((carrot, index) => {
+    const count = finalBag[carrot.id] ?? 0;
+    const totalWeight = count * carrot.kg;
+    const totalPrice = count * carrot.price;
+
+    return {
+      ...carrot,
+      index,
+      count,
+      totalWeight,
+      totalPrice,
+    };
+  });
 
   return {
-    maxPrice: bestPrice[bagCapacity],
+    maxPrice: finalBag.price,
     selectedCarrots,
-    solutionTable: [bestPrice],
+    solutionTable: [pricePerWeight],
     usedWeight: bagCapacity - remainingWeight,
   };
 }
+/**
+ * Find the most expensive carrot bag we can make
+ * @param {Array} carrots - Array of {kg, price} carrot objects
+ * @param {number} bagCapacity - Maximum weight our bag can hold
+ * @returns {Object} Solution with maxPrice and selectedCarrots
+ */
+// export function findMostExpensiveBag(carrotTypes, bagCapacity) {
+//   if (!carrotTypes.length || bagCapacity <= 0) {
+//     return { maxPrice: 0, selectedCarrots: [], solutionTable: [] };
+//   }
+
+//   const bestPrice = Array(bagCapacity + 1).fill(0);
+//   const chosenCarrot = Array(bagCapacity + 1).fill(-1);
+
+//   for (let weight = 1; weight <= bagCapacity; weight++) {
+//     for (let carrotIndex = 0; carrotIndex < carrotTypes.length; carrotIndex++) {
+//       const carrotType = carrotTypes[carrotIndex];
+
+//       if (carrotType.kg <= weight) {
+//         const priceWithNewCarrotType =
+//           bestPrice[weight - carrotType.kg] + carrotType.price;
+
+//         if (priceWithNewCarrotType > bestPrice[weight]) {
+//           bestPrice[weight] = priceWithNewCarrotType;
+//           chosenCarrot[weight] = carrotIndex;
+//         }
+//       }
+//     }
+//   }
+
+//   const carrotCounts = Array(carrotTypes.length).fill(0);
+//   let remainingWeight = bagCapacity;
+
+//   while (remainingWeight > 0 && chosenCarrot[remainingWeight] !== -1) {
+//     const carrotIndex = chosenCarrot[remainingWeight];
+//     carrotCounts[carrotIndex]++;
+//     remainingWeight -= carrotTypes[carrotIndex].kg;
+//   }
+
+//   const selectedCarrots = carrotCounts.reduce((result, count, index) => {
+//     if (count > 0) {
+//       const carrotType = carrotTypes[index];
+//       result.push({
+//         ...carrotType,
+//         index,
+//         count,
+//         totalWeight: carrotType.kg * count,
+//         totalPrice: carrotType.price * count,
+//       });
+//     }
+//     return result;
+//   }, []);
+
+//   return {
+//     maxPrice: bestPrice[bagCapacity],
+//     selectedCarrots,
+//     solutionTable: [bestPrice],
+//     usedWeight: bagCapacity - remainingWeight,
+//   };
+// }
 
 /**
  * @param {number} count - Number of carrot types to generate

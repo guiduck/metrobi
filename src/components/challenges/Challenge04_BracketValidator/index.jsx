@@ -159,7 +159,7 @@ export const getBracketMatches = (userInput) => {
     }
   }
 
-  return openningSymbols.length === 0;
+  return Boolean(openningSymbols.length === 0);
 };
 
 export default function Challenge04_BracketValidator() {
@@ -167,8 +167,8 @@ export default function Challenge04_BracketValidator() {
   const [validation, setValidation] = useState(null);
 
   const handleValidate = useCallback(() => {
-    const isvalid = getBracketMatches(input);
-    setValidation(isValid);
+    const isValid = getBracketMatches(input);
+    setValidation({ isValid });
   }, [input]);
 
   /**
