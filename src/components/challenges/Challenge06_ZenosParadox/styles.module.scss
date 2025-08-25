@@ -236,7 +236,9 @@
     border: 1px solid var(--border-default);
     border-radius: var(--radius-lg);
     padding: var(--spacing-lg);
-    overflow-x: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 600px;
 
     .table {
       width: 100%;

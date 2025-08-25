@@ -16,6 +16,8 @@ export function ControlsPanel({
   setDistance,
   tortoiseHeadStart,
   setTortoiseHeadStart,
+  achillesSpeedDecay,
+  setAchillesSpeedDecay,
   isAnimating,
   onStartAnimation,
   onResetAnimation,
@@ -50,6 +52,22 @@ export function ControlsPanel({
           disabled={isAnimating}
         />
         <span className={styles.value}>{tortoiseHeadStart}</span>
+      </div>
+
+      <div className={styles.controlGroup}>
+        <label htmlFor="speedDecay">Achilles Speed Decay:</label>
+        <input
+          id="speedDecay"
+          type="range"
+          min="0.95"
+          max="1"
+          step="0.001"
+          value={achillesSpeedDecay}
+          onChange={(e) => setAchillesSpeedDecay(parseFloat(e.target.value))}
+          className={styles.slider}
+          disabled={isAnimating}
+        />
+        <span className={styles.value}>{achillesSpeedDecay}</span>
       </div>
 
       <div className={styles.actionButtons}>

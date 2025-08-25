@@ -11,29 +11,32 @@ export function ExplanationPanel() {
         <div className={styles.explanationItem}>
           <h5>The Setup:</h5>
           <p>
-            Achilles gives the tortoise a head start. Each time Achilles reaches
-            where the tortoise was, the tortoise has moved a bit further.
+            Achilles (🏃‍♂️) is faster than the tortoise (🐢), but the tortoise
+            gets a head start. This creates the famous paradox scenario.
           </p>
         </div>
         <div className={styles.explanationItem}>
           <h5>The Paradox:</h5>
           <p>
-            Zeno argued that Achilles can never catch the tortoise because he
-            must always first reach where the tortoise was.
+            Zeno argued: "Every time Achilles reaches where the tortoise was,
+            the tortoise has moved further. Therefore, Achilles can never catch
+            up!"
           </p>
         </div>
         <div className={styles.explanationItem}>
-          <h5>The Resolution:</h5>
+          <h5>Reality vs Theory:</h5>
           <p>
-            While there are infinite steps, they form a convergent series. The
-            sum approaches a finite limit, so Achilles does catch up!
+            In reality, Achilles SHOULD overtake the tortoise because he's
+            faster. The paradox is just a mathematical thought experiment about
+            infinite steps.
           </p>
         </div>
         <div className={styles.explanationItem}>
-          <h5>Mathematical Insight:</h5>
+          <h5>This Simulation:</h5>
           <p>
-            Position = Distance × (1 - ½ⁿ) where n is the number of steps. As n
-            → ∞, position → Distance.
+            Adjust the "Speed Decay" to see different outcomes:
+            <br />• 1.0 = Achilles wins (reality)
+            <br />• &lt;1.0 = Achilles gets tired (demonstrates the paradox)
           </p>
         </div>
       </div>

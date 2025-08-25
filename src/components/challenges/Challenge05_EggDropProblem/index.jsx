@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import styles from "./styles.module.scss";
 import {
   ConfigurationSection,
@@ -8,22 +8,27 @@ import {
   ExplanationSection,
 } from "./ui";
 
+const DEFAULT_SEARCH_RANGE_SIZE = 10;
+const FLOORS = 100;
+
 /**
  * Solves the egg dropping problem using range division strategy
  * Always uses 2 eggs and 100 floors
  * @returns {Object} Result with drops, breaking floor, and worst case
  */
-export function solveEggDrop(breakingFloor, searchRangeSize = 10) {
-  const floors = 100;
-
+export function solveEggDrop(
+  breakingFloor,
+  searchRangeSize = DEFAULT_SEARCH_RANGE_SIZE
+) {
   let firstEggDrops = 0;
   let secondEggDrops = 0;
   let foundBreakingFloor = null;
 
   let firstEggBrokeAt = null;
+
   for (
     let floor = searchRangeSize;
-    floor <= floors - searchRangeSize;
+    floor <= FLOORS - searchRangeSize;
     floor += searchRangeSize
   ) {
     firstEggDrops++;
@@ -34,8 +39,8 @@ export function solveEggDrop(breakingFloor, searchRangeSize = 10) {
     }
   }
 
-  let searchStart = floors - searchRangeSize + 1,
-    searchEnd = floors;
+  let searchStart = FLOORS - searchRangeSize + 1,
+    searchEnd = FLOORS;
 
   if (!!firstEggBrokeAt) {
     searchStart = firstEggBrokeAt - searchRangeSize + 1;
@@ -52,7 +57,7 @@ export function solveEggDrop(breakingFloor, searchRangeSize = 10) {
   }
 
   const worstCaseDrops =
-    Math.ceil(floors / searchRangeSize) - 1 + searchRangeSize;
+    Math.ceil(FLOORS / searchRangeSize) - 1 + searchRangeSize;
 
   return {
     drops: firstEggDrops + secondEggDrops,
@@ -63,28 +68,19 @@ export function solveEggDrop(breakingFloor, searchRangeSize = 10) {
   };
 }
 
-/**
- * Generates the optimal sequence for 100 floors with 2 eggs
- * Using range division strategy (10 ranges)
- */
-export function getOptimal100FloorSequence() {
-  const sequence = [];
-  const rangeSize = 10;
-
-  for (let i = rangeSize; i < 100; i += rangeSize) {
-    sequence.push(i);
-  }
-
-  return sequence;
-}
-
 export default function Challenge05_EggDropProblem() {
   const [result, setResult] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
-  const [breakingFloor, setBreakingFloor] = useState(
-    Math.floor(Math.random() * 100) + 1
+  const [breakingFloor, setBreakingFloor] = useState();
+  const [searchRangeSize, setSearchRangeSize] = useState(
+    DEFAULT_SEARCH_RANGE_SIZE
   );
-  const [searchRangeSize, setSearchRangeSize] = useState(10);
+
+  useEffect(() => {
+    const mostCriticalBreakingFloor =
+      Math.ceil(FLOORS / searchRangeSize) + searchRangeSize - 1;
+    setBreakingFloor(mostCriticalBreakingFloor);
+  }, [searchRangeSize]);
 
   const handleSolve = useCallback(() => {
     setIsRunning(true);

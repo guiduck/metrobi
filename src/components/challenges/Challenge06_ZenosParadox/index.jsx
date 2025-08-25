@@ -10,13 +10,18 @@ import {
 } from "./ui";
 
 const TOTAL_ANIMATION_TIME = 10000; // 10s
+const DEFAULT_SPEED_DECAY = 1;
 
 /**
  * @param {number} distance - Total race distance
  * @param {number} tortoiseHeadStart - Tortoise initial head start
  * @returns {Object} Race result with steps, totalTime, and winner
  */
-export const getRaceResult = (distance = 100, tortoiseHeadStart = 10) => {
+export const getRaceResult = (
+  distance = 100,
+  tortoiseHeadStart = 10,
+  achillesSpeedDecay = DEFAULT_SPEED_DECAY
+) => {
   const tortoiseSpeed = 1;
   const tortoiseStepsToFinish = distance / tortoiseSpeed;
   const tortoiseTime = TOTAL_ANIMATION_TIME / tortoiseStepsToFinish;
@@ -51,6 +56,8 @@ export const getRaceResult = (distance = 100, tortoiseHeadStart = 10) => {
     time: currentTime,
   });
 
+  let lastCheckpoint = checkpoint;
+
   while (tortoise.position < distance) {
     if (achilles.position >= distance) {
       achilles.speed = 0;
@@ -60,11 +67,17 @@ export const getRaceResult = (distance = 100, tortoiseHeadStart = 10) => {
       achilles.position >= checkpoint &&
       tortoise.position > achilles.position
     ) {
+      lastCheckpoint = checkpoint;
       checkpoint = tortoise.position;
     }
 
     tortoise.position += tortoise.speed;
-    achilles.position += achilles.speed;
+
+    if (tortoise.position - checkpoint > (checkpoint - lastCheckpoint) / 2) {
+      achilles.position += achilles.speed;
+    }
+
+    achilles.speed *= achillesSpeedDecay;
 
     tortoise.percentage = Math.min((tortoise.position / distance) * 100, 100);
     achilles.percentage = Math.min((achilles.position / distance) * 100, 100);
@@ -89,10 +102,12 @@ export const getRaceResult = (distance = 100, tortoiseHeadStart = 10) => {
 export default function Challenge06_ZenosParadox() {
   const [distance, setDistance] = useState(100);
   const [tortoiseHeadStart, setTortoiseHeadStart] = useState(10);
+  const [achillesSpeedDecay, setAchillesSpeedDecay] =
+    useState(DEFAULT_SPEED_DECAY);
 
   const raceResult = useMemo(
-    () => getRaceResult(distance, tortoiseHeadStart),
-    [distance, tortoiseHeadStart]
+    () => getRaceResult(distance, tortoiseHeadStart, achillesSpeedDecay),
+    [distance, tortoiseHeadStart, achillesSpeedDecay]
   );
 
   const {
@@ -149,6 +164,8 @@ export default function Challenge06_ZenosParadox() {
           setDistance={setDistance}
           tortoiseHeadStart={tortoiseHeadStart}
           setTortoiseHeadStart={setTortoiseHeadStart}
+          achillesSpeedDecay={achillesSpeedDecay}
+          setAchillesSpeedDecay={setAchillesSpeedDecay}
           isAnimating={isAnimating}
           onStartAnimation={startAnimation}
           onResetAnimation={resetAnimation}

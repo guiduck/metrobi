@@ -132,15 +132,21 @@ export const getBracketMatches = (userInput) => {
   for (let i = 0; i < userInput.length; i++) {
     const symbol = userInput[i];
 
+    // const isASymbol = openSymbols.includes(symbol) || closeSymbols.includes(symbol);
+
+    // if (!isASymbol) {
+    //   return {
+    //     isValid: false,
+    //   }
+    // }
+
     if (openSymbols.includes(symbol)) {
       openningSymbols.push(symbol);
     }
 
     if (closeSymbols.includes(symbol)) {
       if (openningSymbols.length === 0) {
-        return {
-          isValid: false,
-        };
+        return false;
       }
 
       const lastOpenningSymbol = openningSymbols.pop();
@@ -148,16 +154,12 @@ export const getBracketMatches = (userInput) => {
       const expectedClosingSymbol = pairOfSymbols[lastOpenningSymbol];
 
       if (symbol !== expectedClosingSymbol) {
-        return {
-          isValid: false,
-        };
+        return false;
       }
     }
   }
 
-  return {
-    isValid: openningSymbols.length === 0,
-  };
+  return openningSymbols.length === 0;
 };
 
 export default function Challenge04_BracketValidator() {
@@ -165,8 +167,8 @@ export default function Challenge04_BracketValidator() {
   const [validation, setValidation] = useState(null);
 
   const handleValidate = useCallback(() => {
-    const { isValid } = getBracketMatches(input);
-    setValidation({ isValid });
+    const isvalid = getBracketMatches(input);
+    setValidation(isValid);
   }, [input]);
 
   /**

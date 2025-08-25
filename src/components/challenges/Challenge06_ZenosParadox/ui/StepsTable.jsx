@@ -24,27 +24,18 @@ export function StepsTable({ activeRaceResult, currentStep }) {
             </tr>
           </thead>
           <tbody>
-            {activeRaceResult.steps
-              .slice(0, Math.min(activeRaceResult.steps.length, 12))
-              .map((step, index) => (
-                <tr
-                  key={index}
-                  className={index <= currentStep ? styles.reachedRow : ""}
-                >
-                  <td>{index}</td>
-                  <td>{step.achilles.position.toFixed(2)}</td>
-                  <td>{step.tortoise.position.toFixed(2)}</td>
-                  <td>{step.checkpoint.toFixed(2)}</td>
-                  <td>{step.time.toFixed(0)}</td>
-                </tr>
-              ))}
-            {activeRaceResult.steps.length > 12 && (
-              <tr>
-                <td colSpan="5" className={styles.moreRows}>
-                  ... {activeRaceResult.steps.length - 12} more steps
-                </td>
+            {activeRaceResult.steps.map((step, index) => (
+              <tr
+                key={index}
+                className={index <= currentStep ? styles.reachedRow : ""}
+              >
+                <td>{index}</td>
+                <td>{step.achilles.position.toFixed(2)}</td>
+                <td>{step.tortoise.position.toFixed(2)}</td>
+                <td>{step.checkpoint.toFixed(2)}</td>
+                <td>{step.time.toFixed(0)}</td>
               </tr>
-            )}
+            ))}
           </tbody>
         </table>
       </div>

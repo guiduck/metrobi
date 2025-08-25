@@ -1,3 +1,4 @@
+import { stringifyNestedObjects } from "..";
 import styles from "../styles.module.scss";
 
 /**
@@ -14,16 +15,21 @@ export function ResultsSection({ array, duplicates }) {
       <div className={styles.arrayDisplay}>
         <h4>Input Array:</h4>
         <div className={styles.arrayItems}>
-          {array.map((item, index) => (
-            <span
-              key={index}
-              className={`${styles.arrayItem} ${
-                duplicates.includes(item) ? styles.duplicate : ""
-              }`}
-            >
-              {JSON.stringify(item)}
-            </span>
-          ))}
+          {array.map((item, index) => {
+            const itemStringified = stringifyNestedObjects(item);
+            const isDuplicate = duplicates.includes(itemStringified);
+
+            return (
+              <span
+                key={index}
+                className={`${styles.arrayItem} ${
+                  isDuplicate ? styles.duplicate : ""
+                }`}
+              >
+                {itemStringified}
+              </span>
+            );
+          })}
         </div>
       </div>
 
@@ -33,7 +39,7 @@ export function ResultsSection({ array, duplicates }) {
           <div className={styles.duplicateItems}>
             {duplicates.map((item, index) => (
               <span key={index} className={styles.duplicateItem}>
-                {JSON.stringify(item)}
+                {item}
               </span>
             ))}
           </div>
